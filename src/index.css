@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
+@import "tailwindcss";
+
+/* ============================================
+   SONCHOY — DARK THEME
+   Paper is dark, ink-950 is brightest text.
+   Crimson stays as the accent (works on dark).
+   ============================================ */
+
+@theme {
+  /* ---------- BRAND (crimson — unchanged) ---------- */
+  --color-crimson-50:  #FFF1F1;
+  --color-crimson-100: #FFE0E0;
+  --color-crimson-200: #FFC2C2;
+  --color-crimson-300: #FF9494;
+  --color-crimson-400: #FF5757;
+  --color-crimson-500: #ED2828;
+  --color-crimson-600: #D11414;
+  --color-crimson-700: #AE0F0F;
+  --color-crimson-800: #8B0F0F;
+  --color-crimson-900: #730F0F;
+  --color-crimson-950: #410505;
+
+  /* ---------- INK / FOREGROUND (light text on dark bg) ----------
+     Higher number = stronger contrast against paper. */
+  --color-ink-50:  #16140F;
+  --color-ink-100: #25221C;
+  --color-ink-200: #38332A;
+  --color-ink-300: #4F4A3F;
+  --color-ink-400: #6B6657;
+  --color-ink-500: #8A8474;
+  --color-ink-600: #A8A192;
+  --color-ink-700: #C5BEAC;
+  --color-ink-800: #DBD6CA;
+  --color-ink-900: #EDEAE3;
+  --color-ink-950: #FBFAF7;
+
+  /* ---------- SURFACE (warm dark system) ---------- */
+  --color-paper:        #0A0A09;  /* page background */
+  --color-canvas:       #050504;  /* sunken sections (deeper) */
+  --color-surface:      #16140F;  /* lifted cards */
+  --color-line:         #2A2723;  /* subtle borders */
+  --color-line-strong:  #3A3631;  /* stronger borders */
+
+  /* ---------- CATEGORY ACCENTS (dark-tinted, one per filter group) ---------- */
+  --color-convert:       #6B95FF;  /* Conversion — blue */
+  --color-convert-bg:    #14213D;
+  --color-edit:          #B89AFC;  /* PDF tools — violet */
+  --color-edit-bg:       #221A3D;
+  --color-business:      #34D0BC;  /* Documents — emerald-teal */
+  --color-business-bg:   #0F2622;
+  --color-invoicing:     #FBBF24;  /* Invoicing — amber */
+  --color-invoicing-bg:  #2D1F08;
+  --color-accounting:    #818CF8;  /* Accounting — indigo */
+  --color-accounting-bg: #1B1D3D;
+  --color-tax:           #A3E635;  /* Tax & banking — lime */
+  --color-tax-bg:        #1A2408;
+  --color-contracts:     #FB7185;  /* Contracts — rose */
+  --color-contracts-bg:  #2A1018;
+
+  /* ---------- SEMANTIC (brightened for dark) ---------- */
+  --color-success:    #4ADE80;
+  --color-success-bg: #0F2620;
+  --color-warning:    #FBBF24;
+  --color-warning-bg: #2D1F08;
+  --color-danger:     #F87171;
+  --color-danger-bg:  #2A1212;
+  --color-info:       #60A5FA;
+  --color-info-bg:    #131F3D;
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --font-sans:  'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-mono:  'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --text-2xs: 11px;
+  --text-xs:  12px;
+  --text-sm:  13px;
+  --text-md:  14px;
+  --text-base:15px;
+  --text-lg:  17px;
+  --text-xl:  20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 38px;
+  --text-5xl: 48px;
+  --text-6xl: 64px;
+  --text-7xl: 80px;
+
+  /* ---------- RADII ---------- */
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-2xl: 24px;
+
+  /* ---------- SHADOWS (dark-aware) ---------- */
+  --shadow-xs:    0 1px 1px rgba(0,0,0,0.4);
+  --shadow-sm:    0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+  --shadow-md:    0 4px 8px -2px rgba(0,0,0,0.5), 0 2px 4px -1px rgba(0,0,0,0.3);
+  --shadow-lg:    0 12px 24px -8px rgba(0,0,0,0.6), 0 4px 8px -2px rgba(0,0,0,0.4);
+  --shadow-xl:    0 24px 48px -12px rgba(0,0,0,0.7), 0 8px 16px -4px rgba(0,0,0,0.5);
+  --shadow-focus: 0 0 0 3px rgba(237,40,40,0.35);
+
+  /* ---------- MOTION ---------- */
+  --ease-brand: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ---------- LAYOUT ---------- */
+  --container-page: 1240px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-ink-900);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'ss01', 'cv11';
+  color-scheme: dark;
+}
+
+a { color: inherit; }
+
+::selection { background: var(--color-crimson-500); color: #fff; }
+
+/* Capitalize headings and buttons site-wide */
+h1, h2, h3,
+.btn,
+button {
+  text-transform: capitalize;
+}
+
+/* ---------- Component classes ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: var(--radius-md);
+  background: var(--color-ink-100);
+  color: var(--color-ink-950);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+  transition: background 200ms var(--ease-brand), transform 80ms var(--ease-brand), box-shadow 200ms var(--ease-brand), border-color 200ms var(--ease-brand);
+}
+.btn:hover { background: var(--color-ink-200); }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+.btn-primary {
+  background: var(--color-crimson-500);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px -4px rgba(237,40,40,0.5);
+}
+.btn-primary:hover {
+  background: var(--color-crimson-600);
+  box-shadow: 0 6px 18px -4px rgba(237,40,40,0.6);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-ink-950);
+  border-color: var(--color-line-strong);
+}
+.btn-secondary:hover {
+  background: var(--color-ink-100);
+  border-color: var(--color-ink-300);
+}
+
+.btn-ghost { background: transparent; color: var(--color-ink-800); }
+.btn-ghost:hover { background: var(--color-surface); }
+
+.btn-cta {
+  color: #FFFFFF;
+  background: linear-gradient(180deg, var(--color-crimson-500) 0%, var(--color-crimson-600) 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.18) inset, 0 6px 18px -4px rgba(237,40,40,0.55);
+}
+.btn-cta:hover {
+  background: linear-gradient(180deg, var(--color-crimson-600) 0%, var(--color-crimson-700) 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.18) inset, 0 8px 24px -4px rgba(237,40,40,0.7);
+}
+
+.btn-lg { padding: 14px 22px; font-size: 15px; }
+.btn-xl { padding: 18px 28px; font-size: 16px; border-radius: var(--radius-lg); }

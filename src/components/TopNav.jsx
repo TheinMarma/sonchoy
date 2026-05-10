@@ -1,0 +1,422 @@
+import { useEffect, useState } from 'react'
+import { BrandMark, Caret, ArrowRight } from './icons'
+
+/* ---------- Mega-menu data ---------- */
+
+const MENUS = {
+  invoicing: {
+    label: 'Invoicing',
+    columns: [
+      {
+        title: 'Invoice generators',
+        items: [
+          ['Invoice generator',          'General-purpose, branded'],
+          ['Tax invoice',                'HSN/SAC, tax breakdowns'],
+          ['GST / VAT invoice',          'Multi-rate, reverse charge'],
+          ['Proforma invoice',           'Pre-quote, converts later'],
+          ['Recurring invoice',          'Set a cadence, auto-draft'],
+          ['Freelance invoice',          'Hours, day rates, retainers'],
+        ],
+      },
+      {
+        title: 'Billing utilities',
+        items: [
+          ['Invoice number generator',   'Sequential or fiscal-year'],
+          ['Invoice template builder',   'Reusable branded layouts'],
+          ['Invoice PDF exporter',       'Bulk-export drafts to PDF'],
+        ],
+      },
+    ],
+    seeAll: 'View all 9 invoicing tools',
+  },
+  documents: {
+    label: 'Documents',
+    columns: [
+      {
+        title: 'Sales documents',
+        items: [
+          ['Quotation',                  'Itemised, tax-aware quotes'],
+          ['Receipt',                    'Issue on payment received'],
+          ['Purchase order',             'Vendor-facing POs'],
+          ['Delivery note',              'Pack list, no pricing'],
+        ],
+      },
+      {
+        title: 'Operations',
+        items: [
+          ['Expense report',             'Receipts → categorised PDF'],
+          ['Salary slip',                'Deductions, taxes, YTD'],
+          ['Financial report',           'Monthly/quarterly with charts'],
+        ],
+      },
+    ],
+    seeAll: 'View all 7 document tools',
+  },
+  accounting: {
+    label: 'Accounting',
+    columns: [
+      {
+        title: 'Statements & ledgers',
+        items: [
+          ['Profit & Loss',              'P&L from CSV or trial balance'],
+          ['Cash Flow',                  'Operating, investing, financing'],
+          ['Balance Sheet',              'Tied-out, PDF-exported'],
+          ['Income statement',           'Revenue, expenses, net income'],
+          ['General ledger',             'Chronological transaction log'],
+          ['Trial balance',              'Debits & credits, audit-ready'],
+        ],
+      },
+      {
+        title: 'Tax & banking',
+        items: [
+          ['Tax calculation sheet',      'Income, slabs, deductions'],
+          ['GST / VAT calculator',       'Multi-rate, reverse charge'],
+          ['Bank reconciliation',        'Book vs. statement match'],
+          ['EMI schedule',               'Principal / interest split'],
+          ['Mortgage payment',           'Escrow, taxes, balance'],
+          ['Investment return calc.',    'CAGR, IRR, absolute return'],
+        ],
+      },
+    ],
+    seeAll: 'View all 40 accounting & tax tools',
+  },
+  pdf: {
+    label: 'PDF tools',
+    columns: [
+      {
+        title: 'Convert & extract',
+        items: [
+          ['Bank statement → Excel',     'Reconciled rows from PDFs'],
+          ['Invoice PDF → Excel',        'Line items, totals, tax'],
+          ['PDF → CSV',                  'Tabular PDFs to CSV'],
+          ['OCR receipt to text',        'Printed & handwritten'],
+          ['PDF table extractor',        'Every table, structured'],
+          ['Scan → PDF',                 'Stitched, deskewed pages'],
+        ],
+      },
+      {
+        title: 'Edit & secure',
+        items: [
+          ['Merge financial PDFs',       'Invoices + statements'],
+          ['Split PDF statements',       'Per-month, per-account'],
+          ['Compress invoice PDFs',      '60–80% smaller'],
+          ['Add signature to PDF',       'Type, draw, or upload'],
+          ['Password-protect PDF',       'AES-256 encryption'],
+        ],
+      },
+    ],
+    seeAll: 'View all 29 PDF & conversion tools',
+  },
+}
+
+const MENU_IDS = ['invoicing', 'documents', 'accounting', 'pdf']
+
+/* ---------- Brand mark (shared by desktop nav + mobile drawer) ---------- */
+
+function Brand({ onClick }) {
+  return (
+    <a
+      href="/"
+      onClick={onClick}
+      className="flex items-center gap-2.5 font-serif text-[22px] font-medium tracking-[-0.02em] text-ink-950 no-underline min-[939px]:text-[24px]"
+    >
+      <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-surface border border-line text-ink-950">
+        <BrandMark size={18} />
+      </span>
+      <span>son<b className="not-italic font-medium italic text-crimson-400">choy</b></span>
+    </a>
+  )
+}
+
+/* ---------- Desktop mega menu ---------- */
+
+function MegaMenu({ menu }) {
+  return (
+    <div className="absolute left-0 top-full z-50 pt-2">
+      <div className="w-[640px] rounded-lg border border-line bg-surface p-5 shadow-xl">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+          {menu.columns.map((col) => (
+            <div key={col.title}>
+              <h6 className="mb-2 px-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-ink-500">
+                {col.title}
+              </h6>
+              {col.items.map(([name, desc]) => (
+                <a
+                  key={name}
+                  href="#"
+                  className="group flex items-baseline gap-3 rounded-sm px-2 py-1.5 no-underline transition-colors hover:bg-canvas"
+                >
+                  <span className="text-[13px] font-medium text-ink-900 group-hover:text-crimson-300">
+                    {name}
+                  </span>
+                  <span className="ml-auto text-[11px] text-ink-500 group-hover:text-ink-700">
+                    {desc}
+                  </span>
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 flex items-center justify-between border-t border-line pt-3">
+          <a
+            href="#tools"
+            className="inline-flex items-center gap-2 px-2 text-[13px] font-medium text-crimson-300 no-underline hover:text-crimson-400"
+          >
+            {menu.seeAll}
+            <ArrowRight size={12} />
+          </a>
+          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-500">
+            All tools free · no signup
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function NavLink({ href, children, onClick }) {
+  return (
+    <a
+      href={href}
+      onClick={onClick}
+      className="flex items-center gap-1.5 px-3.5 py-2 text-[14px] font-medium text-ink-700 rounded-sm hover:bg-surface hover:text-ink-950 no-underline transition-colors"
+    >
+      {children}
+    </a>
+  )
+}
+
+function NavMenuTrigger({ id, openMenu, setOpenMenu }) {
+  const menu = MENUS[id]
+  const open = openMenu === id
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setOpenMenu(id)}
+      onMouseLeave={() => setOpenMenu(null)}
+    >
+      <button
+        type="button"
+        onClick={() => setOpenMenu(open ? null : id)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className={`flex items-center gap-1.5 px-3.5 py-2 text-[14px] font-medium rounded-sm no-underline transition-colors ${
+          open
+            ? 'bg-surface text-ink-950'
+            : 'text-ink-700 hover:bg-surface hover:text-ink-950'
+        }`}
+      >
+        {menu.label}
+        <Caret
+          className={`w-2.5 h-2.5 transition-transform ${
+            open ? 'rotate-180 text-ink-300' : 'text-ink-500'
+          }`}
+        />
+      </button>
+      {open && <MegaMenu menu={menu} />}
+    </div>
+  )
+}
+
+/* ---------- Mobile drawer item ---------- */
+
+function MobileSection({ id, expanded, setExpanded, onClose }) {
+  const menu = MENUS[id]
+  const isExp = expanded === id
+  return (
+    <div className="border-b border-line">
+      <button
+        type="button"
+        onClick={() => setExpanded(isExp ? null : id)}
+        aria-expanded={isExp}
+        className="flex w-full items-center justify-between py-4 text-left"
+      >
+        <span className="text-[16px] font-medium text-ink-950">{menu.label}</span>
+        <span
+          className={`flex h-7 w-7 items-center justify-center rounded-full border border-line transition-transform ${
+            isExp ? 'rotate-180 bg-surface' : ''
+          }`}
+        >
+          <Caret className="h-3 w-3 text-ink-500" />
+        </span>
+      </button>
+
+      <div
+        className="grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out"
+        style={{ gridTemplateRows: isExp ? '1fr' : '0fr' }}
+      >
+        <div className="min-h-0">
+          <div className="space-y-5 pb-5">
+            {menu.columns.map((col) => (
+              <div key={col.title}>
+                <h6 className="m-0 mb-2.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ink-500">
+                  {col.title}
+                </h6>
+                <ul className="m-0 list-none space-y-2.5 p-0">
+                  {menu.columns.find(c => c.title === col.title).items.map(([name, desc]) => (
+                    <li key={name}>
+                      <a
+                        href="#"
+                        onClick={onClose}
+                        className="block no-underline"
+                      >
+                        <span className="block text-[14px] font-medium text-ink-900">
+                          {name}
+                        </span>
+                        <span className="block text-[11px] text-ink-500">{desc}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <a
+              href="#tools"
+              onClick={onClose}
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-crimson-300 no-underline hover:text-crimson-400"
+            >
+              {menu.seeAll}
+              <ArrowRight size={12} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ---------- TopNav ---------- */
+
+export default function TopNav() {
+  const [openMenu, setOpenMenu] = useState(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileExpanded, setMobileExpanded] = useState(null)
+
+  // Close on Escape
+  useEffect(() => {
+    if (!openMenu && !mobileOpen) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setOpenMenu(null)
+        setMobileOpen(false)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [openMenu, mobileOpen])
+
+  // Lock body scroll while drawer open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileOpen])
+
+  const closeMobile = () => {
+    setMobileOpen(false)
+    setMobileExpanded(null)
+  }
+
+  return (
+    <>
+      <nav className="sticky top-0 z-40 flex items-center gap-4 border-b border-line bg-paper/80 px-4 py-3 backdrop-blur-md backdrop-saturate-150 min-[939px]:gap-8 min-[939px]:px-8 min-[939px]:py-3.5">
+        <Brand />
+
+        {/* Desktop nav items */}
+        <div className="hidden flex-1 gap-1 min-[939px]:flex">
+          {MENU_IDS.map((id) => (
+            <NavMenuTrigger key={id} id={id} openMenu={openMenu} setOpenMenu={setOpenMenu} />
+          ))}
+          <NavLink href="#tools">All tools</NavLink>
+        </div>
+
+        {/* Right-side group: CTA (tablet+) + hamburger (below 939px) */}
+        <div className="ml-auto flex items-center gap-2">
+          <a
+            href="https://go.sonchoy.com/pdfFiller"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary !hidden min-[939px]:!inline-flex"
+          >
+            Try Premium Free
+            <ArrowRight size={12} />
+          </a>
+
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMobileOpen(true)}
+            className="flex h-10 w-10 items-center justify-center rounded-md border border-line bg-surface text-ink-950 transition-colors hover:bg-ink-100 min-[939px]:hidden"
+          >
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
+              <path d="M3 7h16M3 12h16M3 17h16" />
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex flex-col bg-paper min-[939px]:hidden"
+        >
+          <div className="flex items-center justify-between border-b border-line px-4 py-3">
+            <Brand onClick={closeMobile} />
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={closeMobile}
+              className="flex h-10 w-10 items-center justify-center rounded-md border border-line bg-surface text-ink-950 transition-colors hover:bg-ink-100"
+            >
+              <svg width="20" height="20" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round">
+                <path d="M5 5l12 12M17 5L5 17" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto px-4 pb-6">
+            {MENU_IDS.map((id) => (
+              <MobileSection
+                key={id}
+                id={id}
+                expanded={mobileExpanded}
+                setExpanded={setMobileExpanded}
+                onClose={closeMobile}
+              />
+            ))}
+            <a
+              href="#tools"
+              onClick={closeMobile}
+              className="block border-b border-line py-4 text-[16px] font-medium text-ink-950 no-underline"
+            >
+              All tools
+            </a>
+          </div>
+
+          <div className="border-t border-line bg-canvas px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <a
+              href="https://go.sonchoy.com/pdfFiller"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMobile}
+              className="btn btn-primary w-full"
+            >
+              Try Premium Free
+              <ArrowRight size={12} />
+            </a>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
