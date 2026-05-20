@@ -2,20 +2,19 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowRight, Check, Plus, BrandMark,
-  InvoiceIcon, TaxInvoiceIcon, VatIcon, RecurringIcon, QuoteIcon, ReceiptIcon,
-  HashIcon, TemplateIcon, ExportIcon,
+  InvoiceIcon, TaxInvoiceIcon, VatIcon, RecurringIcon, QuoteIcon, ExportIcon,
 } from '../components/icons'
 import PromoBento from '../components/promos/PromoBento'
 import CalloutStatHook from '../components/callouts/CalloutStatHook'
 
 import {
-  CURRENCIES, TAX_PRESETS, PAYMENT_TERMS,
-  computeTotals, formatNumber, formatMoney, formatDate,
-  todayISO, addDays, nextInvoiceNumber, lineAmount,
-} from '../lib/invoice/format'
-import { generateInvoicePdf } from '../lib/invoice/generatePdf'
-import { generateInvoiceDocx } from '../lib/invoice/generateDocx'
-import { generateInvoiceXlsx } from '../lib/invoice/generateXlsx'
+  CURRENCIES, TAX_PRESETS, PAYMENT_TERMS, VALIDITY_PRESETS,
+  findValidity,
+  computeTotals, formatNumber, formatMoney,
+  todayISO, addDays, lineAmount,
+} from '../lib/proforma/format'
+import { generateProformaPdf } from '../lib/proforma/generatePdf'
+import { generateProformaXlsx } from '../lib/proforma/generateXlsx'
 
 /* ---------- Local helpers ---------- */
 
@@ -30,25 +29,6 @@ const SectionTitle = ({ children, className = '' }) => (
     {children}
   </h2>
 )
-
-/* ---------- Sample data shown in preview mockups ---------- */
-
-const SAMPLE_INVOICE = {
-  number: 'INV-2026-0042',
-  issueDate: '06 May 2026',
-  dueDate: '20 May 2026',
-  vendor: 'Sonchoy Studio',
-  buyer: 'Northwind Books Ltd.',
-  currency: 'USD',
-  items: [
-    ['Brand strategy & identity sprint',  1,  '8,400.00',  '8,400.00'],
-    ['Web design — landing & onboarding', 2,  '5,200.00',  '10,400.00'],
-    ['Implementation support, May',       12, '150.00',    '1,800.00'],
-  ],
-  subtotal: '20,600.00',
-  tax: '4,120.00',
-  total: '24,720.00',
-}
 
 /* ---------- 1) Tool hero (homepage style — popup-launched) ---------- */
 
@@ -73,7 +53,7 @@ function LiveDemoModal({ open, onClose }) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Live Invoice Generator"
+      aria-label="Live Proforma Invoice Generator"
       onClick={onClose}
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/90 px-4 py-8 backdrop-blur-md md:px-8 md:py-12"
     >
@@ -85,9 +65,9 @@ function LiveDemoModal({ open, onClose }) {
 }
 
 const HERO_STATS = [
-  ['60s',   'First invoice'],
-  ['PDF+',  'DOCX + XLSX'],
-  ['GST/VAT', 'Tax presets'],
+  ['5',     'Validity windows'],
+  ['PRF',   'Auto numbering'],
+  ['PDF+',  'XLSX exports'],
   ['Free',  'Always · no signup'],
 ]
 
@@ -125,28 +105,28 @@ function ToolHero() {
             <span className="text-ink-400">/</span>
             <span className="text-invoicing">Invoicing</span>
             <span className="text-ink-400">/</span>
-            <span className="text-ink-950">Invoice Generator</span>
+            <span className="text-ink-950">Proforma Invoice Generator</span>
           </nav>
 
           <span className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-invoicing/30 bg-invoicing-bg px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-invoicing">
             <span className="h-1.5 w-1.5 rounded-full bg-invoicing shadow-[0_0_0_4px_rgba(251,191,36,0.25)]" />
-            Invoicing · Document creation
+            Invoicing · Pre-sale quote
           </span>
 
           <h1 className="mb-7 max-w-[1000px] font-medium text-[44px] leading-[1.02] tracking-[-0.035em] text-ink-950 md:text-[80px] md:leading-[0.98]">
-            Invoice generator{' '}
+            Proforma invoices{' '}
             <em className="font-serif font-normal italic tracking-[-0.015em] text-crimson-300">
-              built for
+              that close
             </em>
             <br />
-            finance{' '}
+            the{' '}
             <em className="font-serif font-normal italic tracking-[-0.015em] text-crimson-300">
-              teams.
+              deal.
             </em>
           </h1>
 
           <p className="mb-10 max-w-[640px] text-xl leading-[1.55] text-ink-700">
-            Fill a clean form, pick a template, and ship a branded invoice PDF in seconds. GST, VAT, and Sales-tax aware out of the box — with currency, locale, and payment-terms wiring already done.
+            A clean, branded price preview your buyer can sign off on — with validity window, expected delivery, and a clear "not a tax invoice" disclaimer. Convert to a full invoice the moment the order lands.
           </p>
 
           <div className="mb-12 flex flex-wrap items-center gap-3">
@@ -174,7 +154,7 @@ function ToolHero() {
               <Check className="text-crimson-400" /> 100% local · nothing uploaded
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Check className="text-crimson-400" /> Print-ready output
+              <Check className="text-crimson-400" /> Converts to invoice
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Check className="text-crimson-400" /> Esc to close
@@ -201,28 +181,7 @@ function ToolHero() {
   )
 }
 
-/* ---------- Generator panel mockup (hero right side) ---------- */
-
-/** Read-only field — used by the static PreviewSection mockup only. */
-function Field({ label, value, hint, mono = false, className = '' }) {
-  return (
-    <div className={`flex flex-col gap-[5px] ${className}`}>
-      <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-500">
-        {label}
-      </span>
-      <div className="flex min-h-[36px] items-center justify-between gap-2 rounded-lg border border-line bg-paper px-3 py-2">
-        <span className={`text-[12.5px] text-ink-950 ${mono ? 'font-mono' : ''}`}>{value}</span>
-        {hint && (
-          <span className="shrink-0 rounded border border-line/60 bg-canvas px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.06em] text-ink-400">
-            {hint}
-          </span>
-        )}
-      </div>
-    </div>
-  )
-}
-
-/* ----- Editable form-input building blocks (styled to match `Field`) ----- */
+/* ---------- Editable form input building blocks ---------- */
 
 const labelClass = 'font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-500'
 const inputClass =
@@ -302,22 +261,21 @@ function SelectInput({ label, value, onChange, options, className = '' }) {
         }}
       >
         {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
+          <option key={o.value} value={o.value}>{o.label}</option>
         ))}
       </select>
     </div>
   )
 }
 
-/* -------------------- Full functional generator -------------------- */
+/* ---------- Stateful Proforma Generator ---------- */
 
-const INITIAL_INVOICE = {
-  number: 'INV-2026-0042',
+const INITIAL = {
+  number: 'PRF-2026-0042',
   issueDate: todayISO(),
-  dueDate:   addDays(todayISO(), 14),
-  termsId:   'net-14',
+  validityId: 'days-30',
+  validUntil: addDays(todayISO(), 30),
+  expectedDelivery: addDays(todayISO(), 14),
 
   brand: 'Sonchoy Studio',
   fromName:    'Sonchoy Studio',
@@ -326,7 +284,7 @@ const INITIAL_INVOICE = {
   toAddress:   'accounts@northwind.co\n221B Baker Street, London',
 
   currency: 'USD',
-  taxId:    'vat-20',
+  taxId: 'vat-20',
 
   items: [
     { id: 1, description: 'Brand strategy & identity sprint',  qty: 1,  rate: 8400 },
@@ -334,51 +292,49 @@ const INITIAL_INVOICE = {
     { id: 3, description: 'Implementation support, May',       qty: 12, rate: 150 },
   ],
 
-  notes: 'Thank you for the work. Pay via bank transfer to GB29 NWBK 6016 1331 9268 19',
+  notes: 'Order confirmation will trigger a full tax invoice. 50% deposit due on PO; balance on delivery.',
 }
 
 let nextItemId = 100
 
 function GeneratorPanel() {
-  const [inv, setInv] = useState(INITIAL_INVOICE)
-  const [busy, setBusy] = useState(null) // 'pdf' | 'docx' | 'xlsx' | null
+  const [pf, setPf] = useState(INITIAL)
+  const [busy, setBusy] = useState(null) // 'pdf' | 'xlsx' | null
 
-  const tax  = useMemo(() => TAX_PRESETS.find((t) => t.id === inv.taxId)  || TAX_PRESETS[0], [inv.taxId])
-  const term = useMemo(() => PAYMENT_TERMS.find((t) => t.id === inv.termsId) || PAYMENT_TERMS[1], [inv.termsId])
+  const validity = useMemo(() => findValidity(pf.validityId), [pf.validityId])
+  const tax = useMemo(() => TAX_PRESETS.find((t) => t.id === pf.taxId) || TAX_PRESETS[0], [pf.taxId])
+  const totals = useMemo(() => computeTotals(pf.items, tax.rate), [pf.items, tax.rate])
 
-  const totals = useMemo(() => computeTotals(inv.items, tax.rate), [inv.items, tax.rate])
-
-  const setField  = (key) => (val) => setInv((s) => ({ ...s, [key]: val }))
-  const setIssue  = (val) => setInv((s) => ({ ...s, issueDate: val, dueDate: addDays(val, term.days) }))
-  const setTerms  = (id) => {
-    const t = PAYMENT_TERMS.find((x) => x.id === id) || PAYMENT_TERMS[1]
-    setInv((s) => ({ ...s, termsId: id, dueDate: addDays(s.issueDate, t.days) }))
+  const setField = (key) => (val) => setPf((s) => ({ ...s, [key]: val }))
+  const setIssue = (val) => setPf((s) => ({ ...s, issueDate: val, validUntil: addDays(val, validity.days) }))
+  const setValidity = (id) => {
+    const v = findValidity(id)
+    setPf((s) => ({ ...s, validityId: id, validUntil: addDays(s.issueDate, v.days) }))
   }
 
   const updateItem = (id, patch) =>
-    setInv((s) => ({ ...s, items: s.items.map((it) => (it.id === id ? { ...it, ...patch } : it)) }))
+    setPf((s) => ({ ...s, items: s.items.map((it) => (it.id === id ? { ...it, ...patch } : it)) }))
 
   const removeItem = (id) =>
-    setInv((s) => ({ ...s, items: s.items.length > 1 ? s.items.filter((it) => it.id !== id) : s.items }))
+    setPf((s) => ({ ...s, items: s.items.length > 1 ? s.items.filter((it) => it.id !== id) : s.items }))
 
   const addItem = () =>
-    setInv((s) => ({
+    setPf((s) => ({
       ...s,
       items: [...s.items, { id: nextItemId++, description: '', qty: 1, rate: 0 }],
     }))
 
-  const resetForm = () => setInv({ ...INITIAL_INVOICE, items: INITIAL_INVOICE.items.map((i) => ({ ...i })) })
+  const resetForm = () => setPf({ ...INITIAL, items: INITIAL.items.map((i) => ({ ...i })) })
 
-  /** Build the snapshot expected by the export functions */
   const buildPayload = () => ({
-    ...inv,
+    ...pf,
     taxRate: tax.rate,
     taxLabel: tax.label,
+    items: pf.items.map(({ id, ...rest }) => rest),
   })
 
-  const handlePdf  = async () => { try { setBusy('pdf');  generateInvoicePdf(buildPayload()) }  finally { setBusy(null) } }
-  const handleDocx = async () => { try { setBusy('docx'); await generateInvoiceDocx(buildPayload()) } finally { setBusy(null) } }
-  const handleXlsx = async () => { try { setBusy('xlsx'); generateInvoiceXlsx(buildPayload()) } finally { setBusy(null) } }
+  const handlePdf  = async () => { try { setBusy('pdf');  generateProformaPdf(buildPayload()) }  finally { setBusy(null) } }
+  const handleXlsx = async () => { try { setBusy('xlsx'); generateProformaXlsx(buildPayload()) } finally { setBusy(null) } }
 
   return (
     <aside className="relative">
@@ -390,54 +346,64 @@ function GeneratorPanel() {
 
       <div className="relative rounded-2xl border border-line bg-surface p-5 shadow-2xl">
 
-        {/* Panel header */}
+        {/* Header */}
         <div className="mb-4 flex items-center justify-between">
           <div className="inline-flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-invoicing-bg text-invoicing">
               <InvoiceIcon size={13} />
             </span>
             <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-500">
-              New Invoice
+              New Proforma
             </span>
           </div>
           <button
             type="button"
             onClick={resetForm}
             className="rounded-full border border-line bg-canvas px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.08em] text-ink-500 hover:border-line-strong hover:text-ink-700"
-            aria-label="Reset form to sample values"
           >
             Reset
           </button>
         </div>
 
-        {/* Invoice details */}
+        {/* Reference + currency */}
         <div className="grid grid-cols-[1fr_92px] gap-2">
           <TextInput
-            label="Invoice number"
-            value={inv.number}
+            label="Reference"
+            value={pf.number}
             onChange={setField('number')}
-            placeholder="INV-2026-0001"
+            placeholder="PRF-2026-0001"
             hint="auto"
           />
           <SelectInput
             label="Currency"
-            value={inv.currency}
+            value={pf.currency}
             onChange={setField('currency')}
             options={CURRENCIES.map((c) => ({ value: c.code, label: c.code }))}
           />
         </div>
 
+        {/* Dates */}
         <div className="mt-2 grid grid-cols-2 gap-2">
-          <DateInput label="Issue date" value={inv.issueDate} onChange={setIssue} />
-          <DateInput label="Due date"   value={inv.dueDate}   onChange={setField('dueDate')} hint={term.label} />
+          <DateInput label="Issue date" value={pf.issueDate} onChange={setIssue} />
+          <DateInput
+            label="Valid until"
+            value={pf.validUntil}
+            onChange={setField('validUntil')}
+            hint={validity.label}
+          />
         </div>
 
-        <div className="mt-2">
+        <div className="mt-2 grid grid-cols-2 gap-2">
           <SelectInput
-            label="Payment terms"
-            value={inv.termsId}
-            onChange={setTerms}
-            options={PAYMENT_TERMS.map((t) => ({ value: t.id, label: t.label }))}
+            label="Validity window"
+            value={pf.validityId}
+            onChange={setValidity}
+            options={VALIDITY_PRESETS.map((v) => ({ value: v.id, label: v.label }))}
+          />
+          <DateInput
+            label="Expected delivery"
+            value={pf.expectedDelivery}
+            onChange={setField('expectedDelivery')}
           />
         </div>
 
@@ -447,26 +413,26 @@ function GeneratorPanel() {
         <div className="grid grid-cols-1 gap-2">
           <TextInput
             label="From (your company)"
-            value={inv.fromName}
+            value={pf.fromName}
             onChange={setField('fromName')}
             placeholder="Your Company Ltd."
           />
           <TextareaInput
             label="From address"
-            value={inv.fromAddress}
+            value={pf.fromAddress}
             onChange={setField('fromAddress')}
             placeholder="Street, City, Postcode"
             rows={2}
           />
           <TextInput
-            label="Bill to"
-            value={inv.toName}
+            label="Prepared for"
+            value={pf.toName}
             onChange={setField('toName')}
-            placeholder="Client name"
+            placeholder="Buyer name"
           />
           <TextareaInput
-            label="Bill to address"
-            value={inv.toAddress}
+            label="Buyer address"
+            value={pf.toAddress}
             onChange={setField('toAddress')}
             placeholder="Email or postal address"
             rows={2}
@@ -477,8 +443,8 @@ function GeneratorPanel() {
 
         {/* Tax preset */}
         <SelectInput
-          label="Tax preset"
-          value={inv.taxId}
+          label="Tax preset (estimated)"
+          value={pf.taxId}
           onChange={setField('taxId')}
           options={TAX_PRESETS.map((t) => ({ value: t.id, label: t.label }))}
         />
@@ -499,7 +465,6 @@ function GeneratorPanel() {
             </button>
           </div>
 
-          {/* Column headers */}
           <div className="grid grid-cols-[1fr_44px_72px_72px_22px] gap-x-1.5 rounded-t-md border border-line bg-canvas px-2.5 py-1.5">
             {['Description', 'Qty', 'Rate', 'Amount', ''].map((h, i) => (
               <span
@@ -513,9 +478,8 @@ function GeneratorPanel() {
             ))}
           </div>
 
-          {/* Editable rows */}
           <div className="divide-y divide-line rounded-b-md border-x border-b border-line">
-            {inv.items.map((it) => (
+            {pf.items.map((it) => (
               <div
                 key={it.id}
                 className="grid grid-cols-[1fr_44px_72px_72px_22px] items-center gap-x-1.5 bg-paper px-2 py-1.5"
@@ -551,7 +515,7 @@ function GeneratorPanel() {
                 <button
                   type="button"
                   onClick={() => removeItem(it.id)}
-                  disabled={inv.items.length <= 1}
+                  disabled={pf.items.length <= 1}
                   aria-label="Remove line item"
                   className="flex h-5 w-5 items-center justify-center rounded text-ink-500 transition-colors hover:bg-crimson-500/10 hover:text-crimson-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-ink-500"
                 >
@@ -564,31 +528,43 @@ function GeneratorPanel() {
           </div>
         </div>
 
-        {/* Totals strip */}
+        {/* Totals */}
         <div className="mt-3 rounded-lg border border-line bg-canvas p-3">
           <dl className="m-0 grid grid-cols-[1fr_auto] gap-x-6 gap-y-1.5 text-[11.5px]">
             <dt className="text-ink-500">Subtotal</dt>
             <dd className="m-0 text-right font-mono text-ink-700">{formatNumber(totals.subtotal)}</dd>
             {tax.rate > 0 && (
               <>
-                <dt className="text-ink-500">{tax.label}</dt>
+                <dt className="text-ink-500">{tax.label} (est.)</dt>
                 <dd className="m-0 text-right font-mono text-ink-700">{formatNumber(totals.tax)}</dd>
               </>
             )}
-            <dt className="border-t border-line pt-2 font-semibold text-ink-950">Total due</dt>
+            <dt className="border-t border-line pt-2 font-semibold text-ink-950">Estimated total</dt>
             <dd className="m-0 border-t border-line pt-2 text-right font-mono text-[13px] font-semibold text-invoicing">
-              {formatMoney(totals.total, inv.currency)}
+              {formatMoney(totals.total, pf.currency)}
             </dd>
           </dl>
+        </div>
+
+        {/* Disclaimer banner */}
+        <div className="mt-3 flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2.5">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="mt-0.5 shrink-0 text-amber-400">
+            <path d="M8 1.5l7 13H1L8 1.5z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+            <path d="M8 6v4M8 12.5v.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          <div className="text-[11px] leading-[1.45] text-amber-100">
+            <strong className="font-medium text-amber-200">Not a tax invoice.</strong>{' '}
+            This proforma is a non-binding estimate. A full tax invoice will be issued on order confirmation.
+          </div>
         </div>
 
         {/* Notes */}
         <div className="mt-3">
           <TextareaInput
             label="Notes (optional)"
-            value={inv.notes}
+            value={pf.notes}
             onChange={setField('notes')}
-            placeholder="Bank details, thank-you note, payment links…"
+            placeholder="Payment terms, deposit, delivery conditions…"
             rows={2}
           />
         </div>
@@ -599,31 +575,20 @@ function GeneratorPanel() {
           onClick={handlePdf}
           disabled={busy !== null}
           className="btn btn-primary btn-lg mt-4 w-full disabled:cursor-wait disabled:opacity-70"
-          aria-label="Generate and download invoice PDF"
         >
-          {busy === 'pdf' ? 'Generating…' : 'Generate Invoice PDF'}
+          {busy === 'pdf' ? 'Generating…' : 'Generate Proforma PDF'}
           <ArrowRight size={14} />
         </button>
 
-        {/* Secondary exports */}
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={handleDocx}
-            disabled={busy !== null}
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-line bg-canvas font-mono text-[10px] uppercase tracking-[0.1em] text-ink-700 transition-colors hover:border-line-strong hover:text-ink-950 disabled:cursor-wait disabled:opacity-60"
-          >
-            {busy === 'docx' ? '…' : (<>Export DOCX <ArrowRight size={10} /></>)}
-          </button>
-          <button
-            type="button"
-            onClick={handleXlsx}
-            disabled={busy !== null}
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-line bg-canvas font-mono text-[10px] uppercase tracking-[0.1em] text-ink-700 transition-colors hover:border-line-strong hover:text-ink-950 disabled:cursor-wait disabled:opacity-60"
-          >
-            {busy === 'xlsx' ? '…' : (<>Export XLSX <ArrowRight size={10} /></>)}
-          </button>
-        </div>
+        {/* Secondary export */}
+        <button
+          type="button"
+          onClick={handleXlsx}
+          disabled={busy !== null}
+          className="mt-3 inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-md border border-line bg-canvas font-mono text-[10px] uppercase tracking-[0.1em] text-ink-700 transition-colors hover:border-line-strong hover:text-ink-950 disabled:cursor-wait disabled:opacity-60"
+        >
+          {busy === 'xlsx' ? '…' : (<>Export XLSX <ArrowRight size={10} /></>)}
+        </button>
 
         {/* Footer */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4">
@@ -636,7 +601,7 @@ function GeneratorPanel() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.1em] text-crimson-300 no-underline hover:text-crimson-400"
           >
-            Need recurring?
+            Need batch?
             <ArrowRight size={10} />
           </a>
         </div>
@@ -645,11 +610,27 @@ function GeneratorPanel() {
   )
 }
 
-/* ---------- Invoice mockup (used in preview section) ---------- */
+/* ---------- 2) Static preview ---------- */
 
-function InvoiceMock() {
+const SAMPLE_ITEMS = [
+  ['Brand strategy & identity sprint',  1,  '8,400.00',  '8,400.00'],
+  ['Web design — landing & onboarding', 2,  '5,200.00',  '10,400.00'],
+  ['Implementation support, May',       12, '150.00',    '1,800.00'],
+]
+
+function ProformaMock() {
   return (
     <div className="rounded-md border border-line bg-paper p-6">
+      {/* Top strip */}
+      <div className="mb-5 -mx-6 -mt-6 flex items-center justify-between bg-ink-950 px-6 py-2">
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-invoicing">
+          Proforma Invoice
+        </span>
+        <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-paper/70">
+          Not a tax invoice
+        </span>
+      </div>
+
       <div className="mb-5 flex items-start justify-between gap-4">
         <div className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-ink-950 text-paper">
@@ -660,11 +641,11 @@ function InvoiceMock() {
           </span>
         </div>
         <div className="text-right">
-          <p className="m-0 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-500">Invoice</p>
-          <p className="m-0 mt-1 text-[15px] font-medium text-ink-950">{SAMPLE_INVOICE.number}</p>
+          <p className="m-0 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-500">Proforma No.</p>
+          <p className="m-0 mt-1 text-[15px] font-medium text-ink-950">PRF-2026-0042</p>
           <p className="m-0 mt-1 text-[11px] text-ink-500">
-            Issued {SAMPLE_INVOICE.issueDate}
-            <br />Due {SAMPLE_INVOICE.dueDate}
+            Issued 06 May 2026
+            <br />Valid until 05 Jun 2026
           </p>
         </div>
       </div>
@@ -673,13 +654,13 @@ function InvoiceMock() {
         <div>
           <dt className="m-0 mb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-500">From</dt>
           <dd className="m-0 text-[12px] leading-[1.5] text-ink-800">
-            {SAMPLE_INVOICE.vendor}<br />7 Old Street<br />London EC1V 9HL
+            Sonchoy Studio<br />7 Old Street<br />London EC1V 9HL
           </dd>
         </div>
         <div>
-          <dt className="m-0 mb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-500">Bill to</dt>
+          <dt className="m-0 mb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-500">Prepared for</dt>
           <dd className="m-0 text-[12px] leading-[1.5] text-ink-800">
-            {SAMPLE_INVOICE.buyer}<br />accounts@northwind.co<br />Net 14 days
+            Northwind Books Ltd.<br />accounts@northwind.co<br />Net 14 days
           </dd>
         </div>
       </dl>
@@ -689,12 +670,12 @@ function InvoiceMock() {
           <tr className="border-b border-line">
             <th className="py-2 text-left font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-ink-500">Description</th>
             <th className="py-2 text-right font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-ink-500">Qty</th>
-            <th className="py-2 text-right font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-ink-500">Unit</th>
+            <th className="py-2 text-right font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-ink-500">Rate</th>
             <th className="py-2 text-right font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-ink-500">Amount</th>
           </tr>
         </thead>
         <tbody>
-          {SAMPLE_INVOICE.items.map(([desc, qty, unit, total]) => (
+          {SAMPLE_ITEMS.map(([desc, qty, unit, total]) => (
             <tr key={desc} className="border-b border-line/60">
               <td className="py-2 text-ink-800">{desc}</td>
               <td className="py-2 text-right text-ink-600">{qty}</td>
@@ -708,54 +689,56 @@ function InvoiceMock() {
       <div className="mt-4 flex justify-end">
         <dl className="m-0 grid grid-cols-[1fr_auto] gap-x-8 gap-y-1.5 text-[11px]">
           <dt className="text-ink-500">Subtotal</dt>
-          <dd className="m-0 text-right font-mono text-ink-800">{SAMPLE_INVOICE.subtotal}</dd>
-          <dt className="text-ink-500">VAT 20%</dt>
-          <dd className="m-0 text-right font-mono text-ink-800">{SAMPLE_INVOICE.tax}</dd>
-          <dt className="border-t border-ink-700 pt-2 font-medium text-ink-950">Total due</dt>
+          <dd className="m-0 text-right font-mono text-ink-800">20,600.00</dd>
+          <dt className="text-ink-500">VAT 20% (est.)</dt>
+          <dd className="m-0 text-right font-mono text-ink-800">4,120.00</dd>
+          <dt className="border-t border-ink-700 pt-2 font-medium text-ink-950">Estimated total</dt>
           <dd className="m-0 border-t border-ink-700 pt-2 text-right font-mono text-[14px] font-medium text-ink-950">
-            {SAMPLE_INVOICE.currency} {SAMPLE_INVOICE.total}
+            USD 24,720.00
           </dd>
         </dl>
       </div>
 
-      <p className="m-0 mt-6 border-t border-line pt-3 font-mono text-[9px] uppercase tracking-[0.08em] text-ink-500">
-        Thank you for the work · Pay via bank transfer to GB29 NWBK 6016 1331 9268 19
-      </p>
+      {/* Disclaimer bar */}
+      <div className="mt-5 rounded-md border border-amber-500/40 bg-amber-100 px-3 py-2">
+        <p className="m-0 font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-amber-900">
+          NOT A TAX INVOICE
+        </p>
+        <p className="m-0 mt-0.5 text-[10.5px] leading-[1.4] text-amber-950">
+          This proforma is a non-binding estimate. A tax invoice will be issued on order confirmation.
+        </p>
+      </div>
     </div>
   )
 }
-
-/* ---------- 2) "What you create" — form → invoice ---------- */
 
 function PreviewSection() {
   return (
     <section className="bg-canvas py-24">
       <div className="mx-auto max-w-[1240px] px-6">
         <div className="mx-auto mb-12 max-w-[760px] text-center">
-          <Eyebrow className="mb-4">01 — What you create</Eyebrow>
+          <Eyebrow className="mb-4">01 — What you send</Eyebrow>
           <SectionTitle>
-            From a clean form{' '}
+            From a price form{' '}
             <em className="font-serif font-normal italic text-crimson-300">→</em>{' '}
-            a print-ready invoice.
+            a sign-off-ready proforma.
           </SectionTitle>
           <p className="mx-auto mt-4 max-w-[560px] text-lg leading-[1.55] text-ink-600">
-            Fill the fields once, save your branded template, and reuse it forever. Every invoice ships as both PDF and editable .docx.
+            A clear price preview your buyer can approve before the order lands. Validity window, expected delivery, and a clear disclaimer — all baked in.
           </p>
         </div>
 
         <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-[1fr_auto_1fr]">
-          {/* Form mockup — mirrors the live generator */}
+          {/* Form mockup */}
           <div className="rounded-2xl border border-line bg-paper p-1">
             <div className="rounded-xl bg-surface p-5">
-
-              {/* Card header */}
               <div className="mb-4 flex items-center justify-between">
                 <div className="inline-flex items-center gap-2">
                   <span className="flex h-6 w-6 items-center justify-center rounded-md bg-invoicing-bg text-invoicing">
                     <InvoiceIcon size={13} />
                   </span>
                   <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-500">
-                    Invoice Form
+                    Proforma Form
                   </span>
                 </div>
                 <span className="rounded-full border border-line bg-canvas px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.08em] text-ink-500">
@@ -763,73 +746,47 @@ function PreviewSection() {
                 </span>
               </div>
 
-              {/* Invoice details */}
-              <div className="grid grid-cols-[1fr_72px] gap-2">
-                <Field label="Invoice #" value={SAMPLE_INVOICE.number} hint="auto" />
-                <Field label="Currency" value="USD" mono />
-              </div>
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                <Field label="Issue date" value={SAMPLE_INVOICE.issueDate} />
-                <Field label="Due date"   value={SAMPLE_INVOICE.dueDate} hint="net 14" />
-              </div>
-
-              <div className="my-3 h-px bg-line" />
-
-              {/* Parties + tax */}
               <div className="space-y-2">
-                <Field label="From" value={SAMPLE_INVOICE.vendor} />
-                <Field label="Bill to" value={SAMPLE_INVOICE.buyer} />
-                <div className="grid grid-cols-2 gap-2">
-                  <Field label="Tax type" value="VAT 20%" />
-                  <Field label="Template" value="Classic Dark" />
-                </div>
-              </div>
-
-              <div className="my-3 h-px bg-line" />
-
-              {/* Compact line items */}
-              <div>
-                <span className="mb-1.5 block font-mono text-[9.5px] uppercase tracking-[0.12em] text-ink-500">
-                  Line items
-                </span>
-                <div className="overflow-hidden rounded-md border border-line">
-                  {SAMPLE_INVOICE.items.map(([desc, , , total], i) => (
-                    <div
-                      key={desc}
-                      className={`flex items-center justify-between gap-3 px-3 py-2 text-[11px] ${i < SAMPLE_INVOICE.items.length - 1 ? 'border-b border-line' : ''} bg-paper`}
-                    >
-                      <span className="truncate text-ink-700">{desc}</span>
-                      <span className="shrink-0 font-mono text-ink-900">{total}</span>
+                {[
+                  ['Reference',         'PRF-2026-0042'],
+                  ['Issue date',        '06 May 2026'],
+                  ['Validity',          '30 days · until 05 Jun 2026'],
+                  ['Expected delivery', '20 May 2026'],
+                  ['Prepared for',      'Northwind Books Ltd.'],
+                  ['Tax preset',        'VAT 20% (estimated)'],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex flex-col gap-[5px]">
+                    <span className={labelClass}>{k}</span>
+                    <div className="flex min-h-[36px] items-center rounded-lg border border-line bg-paper px-3 py-2 text-[12.5px] text-ink-950">
+                      {v}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
 
-              {/* Total callout */}
               <div className="mt-3 flex items-center justify-between rounded-lg border border-invoicing/25 bg-invoicing-bg px-3 py-2.5">
                 <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-600">
-                  Total due
+                  Estimated total
                 </span>
                 <span className="font-mono text-[14px] font-semibold text-invoicing">
-                  {SAMPLE_INVOICE.currency} {SAMPLE_INVOICE.total}
+                  USD 24,720.00
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Arrow */}
           <div className="flex items-center justify-center">
             <div className="flex h-12 w-12 rotate-90 items-center justify-center rounded-full border border-crimson-500/40 bg-canvas text-crimson-300 shadow-[0_4px_18px_-4px_rgba(237,40,40,0.4)] lg:rotate-0">
               <ArrowRight size={18} />
             </div>
           </div>
 
-          {/* Output — branded invoice */}
+          {/* Output */}
           <div className="rounded-2xl border border-line bg-paper p-1">
-            <div className="rounded-xl bg-surface p-7">
-              <div className="mb-5 flex items-center justify-between">
+            <div className="rounded-xl bg-surface p-5">
+              <div className="mb-4 flex items-center justify-between">
                 <div className="inline-flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-business-bg text-business">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-md bg-business-bg text-business">
                     <ExportIcon />
                   </span>
                   <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-500">
@@ -837,10 +794,10 @@ function PreviewSection() {
                   </span>
                 </div>
                 <span className="rounded-full bg-success/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-success">
-                  Print-ready
+                  Sign-off ready
                 </span>
               </div>
-              <InvoiceMock />
+              <ProformaMock />
             </div>
           </div>
         </div>
@@ -852,9 +809,9 @@ function PreviewSection() {
 /* ---------- 3) How it works ---------- */
 
 const STEPS = [
-  ['01', 'Fill the form',         'Your business details, the client, line items, taxes, payment terms — every field has a sensible default so you can ship a first invoice in 60 seconds.'],
-  ['02', 'Pick or save a template', 'Branded layout once, reuse forever. Logo, colors, footer notes, and tax presets are saved per template.'],
-  ['03', 'Download the invoice',   'PDF + matching .docx for last-minute edits. Numbering increments automatically so the next one is one click away.'],
+  ['01', 'Fill the form',         'Buyer, line items, expected delivery, validity window. Everything has a sensible default so you can ship a first proforma in 60 seconds.'],
+  ['02', 'Pick a validity window', '7, 14, 30, 60, or 90 days. The "valid until" date follows automatically — buyers see exactly how long the price holds.'],
+  ['03', 'Send the PDF',           'A clean branded PDF with the "not a tax invoice" disclaimer baked in. When the order lands, convert it to a full invoice in one click.'],
 ]
 
 function HowItWorks() {
@@ -866,11 +823,11 @@ function HowItWorks() {
             <Eyebrow className="mb-4">02 — How it works</Eyebrow>
             <SectionTitle>
               Three steps from{' '}
-              <em className="font-serif font-normal italic text-crimson-300">form to PDF.</em>
+              <em className="font-serif font-normal italic text-crimson-300">price form to PDF.</em>
             </SectionTitle>
           </div>
           <p className="m-0 text-lg leading-[1.55] text-ink-600 md:max-w-[480px] md:justify-self-end">
-            No setup, no signup. Type the details once, save the layout, and every future invoice takes 30 seconds — including tax math and totals.
+            No setup, no signup. Type the buyer once, save the layout, and every future proforma takes 30 seconds — validity dates and disclaimers update automatically.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -891,30 +848,30 @@ function HowItWorks() {
   )
 }
 
-/* ---------- 4) What you can customize ---------- */
+/* ---------- 4) What sets a proforma apart ---------- */
 
-const CUSTOMIZE = [
-  { title: 'Brand header & logo',         desc: 'Upload your logo, set accent color, pick a font pairing — saved with the template.' },
-  { title: 'Currency & locale',           desc: 'USD / EUR / GBP / INR / 30+ more, with locale-aware date and number formatting.' },
-  { title: 'Tax presets',                 desc: 'GST (with HSN/SAC), VAT, Sales tax, reverse-charge, and tax-exempt — toggle per line.' },
-  { title: 'Line items & discounts',      desc: 'Per-line quantity, unit price, discount %, and tax. Auto-totalled at the bottom.' },
-  { title: 'Payment terms & due dates',   desc: 'Net 7 / 14 / 30, on receipt, or custom — the due date follows automatically.' },
-  { title: 'Footer notes & signatures',   desc: 'Bank details, payment links, signature line, thank-you note, and legal footers.' },
+const FEATURES = [
+  { title: 'Validity window',       desc: 'How long the price holds — 7, 14, 30, 60, 90 days. Auto-computes "valid until" date.' },
+  { title: 'Expected delivery',     desc: 'A clear date the buyer can plan around — drives faster sign-off and fewer support tickets.' },
+  { title: '"Not a tax invoice"',   desc: 'Auto-stamped disclaimer in the header and footer. Protects you from accidental tax-liability claims.' },
+  { title: 'Estimated tax line',    desc: 'Tax is labelled "(estimated)" everywhere — clearly signalling the final invoice may differ.' },
+  { title: 'Reference numbering',   desc: 'PRF-prefix numbering with fiscal-year resets — keeps proformas separate from your invoice sequence.' },
+  { title: 'Converts to invoice',   desc: 'When the buyer says yes, every field maps one-to-one into a full tax invoice — no re-typing.' },
 ]
 
-function Customize() {
+function Features() {
   return (
     <section className="bg-canvas py-24">
       <div className="mx-auto max-w-[1240px] px-6">
         <div className="mx-auto mb-12 max-w-[720px] text-center">
-          <Eyebrow className="mb-4">03 — What you can customize</Eyebrow>
+          <Eyebrow className="mb-4">03 — Built for pre-sale</Eyebrow>
           <SectionTitle>
-            Every field a finance team{' '}
-            <em className="font-serif font-normal italic text-crimson-300">actually edits.</em>
+            Every field a salesperson{' '}
+            <em className="font-serif font-normal italic text-crimson-300">actually needs.</em>
           </SectionTitle>
         </div>
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-line bg-line md:grid-cols-2 lg:grid-cols-3">
-          {CUSTOMIZE.map((f) => (
+          {FEATURES.map((f) => (
             <div key={f.title} className="bg-surface p-7">
               <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-md border border-invoicing/20 bg-invoicing-bg text-invoicing">
                 <Check size={16} />
@@ -934,12 +891,12 @@ function Customize() {
 /* ---------- 5) FAQ ---------- */
 
 const FAQS = [
-  { q: 'Is the invoice generator actually free?', a: 'Yes. Generate, brand, and download as many invoices as you like. The pdfFiller premium tier is only for batch generation, recurring invoices, and accounting-software push.' },
-  { q: 'Does it support my country\'s tax rules?', a: 'GST (India), VAT (EU, UK, GCC), Sales-tax (US, CA), and zero-tax modes. Tax columns and labels follow the regime you pick.' },
-  { q: 'Can I save my template and reuse it?', a: 'Yes — set logo, accent color, tax preset, payment terms, and footer once, then reuse across every invoice. Templates live in your browser; no signup needed.' },
-  { q: 'What output formats are supported?', a: 'Default is PDF (print-ready). Every invoice also exports as an editable .docx for last-minute manual changes, and a matching .xlsx for record-keeping.' },
-  { q: 'Can I generate recurring invoices?', a: 'For one-off invoices, this tool covers it. For recurring billing — schedule it, send it, dunning logic — the pdfFiller premium tier handles those flows.' },
-  { q: 'Does it auto-number invoices?', a: 'Yes. Sequential, prefixed, or fiscal-year numbering with optional reset. Numbers increment automatically per template.' },
+  { q: 'How is a proforma different from a regular invoice?',   a: 'A proforma is a price preview, not a demand for payment. It is not a tax document, doesn\'t hit your books, and isn\'t valid for input-tax claims. Send it before the buyer commits; issue a tax invoice on confirmation.' },
+  { q: 'When should I use a proforma?',                         a: 'Pre-sale price approvals, international shipments needing customs paperwork before payment, internal PO requisitions, or any time the buyer needs a fixed price to sign off without committing to pay yet.' },
+  { q: 'What does the validity window control?',                a: 'How long the quoted price holds. After "valid until," you can re-issue at a new price or let the buyer know the quote expired. This is the single most important reason buyers come back and sign off quickly.' },
+  { q: 'Why is the tax labelled "estimated"?',                  a: 'Until the order is confirmed, tax could change — different ship-to address, different place of supply, exemption applied, currency conversion. Labelling tax as estimated keeps the proforma legally distinct from a final tax invoice.' },
+  { q: 'Can a buyer pay against a proforma?',                   a: 'Some buyers do — it\'s common with international advance-payment deals. When they do, issue a paid tax invoice once payment is received; the proforma is the precursor, not the receipt.' },
+  { q: 'Output formats?',                                        a: 'PDF (print-ready, with disclaimer baked in) and .xlsx (machine-readable, useful for piping into your CRM or sales-ops sheets).' },
 ]
 
 function FAQ() {
@@ -950,7 +907,7 @@ function FAQ() {
           <Eyebrow className="mb-4">04 — Common questions</Eyebrow>
           <SectionTitle>
             Everything about{' '}
-            <em className="font-serif font-normal italic text-crimson-300">generating invoices.</em>
+            <em className="font-serif font-normal italic text-crimson-300">proforma invoices.</em>
           </SectionTitle>
         </div>
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-line bg-line md:grid-cols-2">
@@ -974,10 +931,10 @@ function FAQ() {
 /* ---------- 6) Related tools ---------- */
 
 const RELATED = [
-  { name: 'Tax Invoice Generator',     desc: 'Region-aware tax invoices with HSN/SAC and tax breakdowns.', Icon: TaxInvoiceIcon, label: 'INVOICING' },
-  { name: 'GST / VAT Invoice',         desc: 'Compliant GST or VAT invoices with multi-rate tax.',         Icon: VatIcon,         label: 'INVOICING' },
-  { name: 'Recurring Invoice Generator', desc: 'Set a cadence; we draft the next invoice every cycle.',     Icon: RecurringIcon,   label: 'INVOICING' },
-  { name: 'Quotation Generator',       desc: 'Itemised quotes that convert to an invoice in one click.',   Icon: QuoteIcon,       label: 'DOCUMENTS' },
+  { name: 'Invoice Generator',      desc: 'Convert this proforma into a full branded invoice in one click.', Icon: InvoiceIcon,     label: 'INVOICING', path: '/tools/invoice-generator' },
+  { name: 'Tax Invoice Generator',  desc: 'GST/VAT/Sales-tax compliant invoices with HSN/SAC codes.',        Icon: TaxInvoiceIcon,  label: 'INVOICING', path: '/tools/tax-invoice-generator' },
+  { name: 'Quotation Generator',    desc: 'Itemised quotes — alternative to proformas in some markets.',     Icon: QuoteIcon,       label: 'DOCUMENTS' },
+  { name: 'Recurring Invoice',      desc: 'Set a cadence; we draft the next invoice every cycle.',           Icon: RecurringIcon,   label: 'INVOICING' },
 ]
 
 function RelatedTools() {
@@ -1003,12 +960,8 @@ function RelatedTools() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {RELATED.map((t) => {
             const isInvoicing = t.label === 'INVOICING'
-            return (
-              <a
-                key={t.name}
-                href="#"
-                className="group relative flex flex-col gap-4 rounded-lg border border-line bg-surface p-6 no-underline transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-md"
-              >
+            const inner = (
+              <>
                 <span className={`absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.08em] ${isInvoicing ? 'text-invoicing' : 'text-business'}`}>
                   {t.label}
                 </span>
@@ -1016,12 +969,17 @@ function RelatedTools() {
                   <t.Icon />
                 </div>
                 <div>
-                  <h4 className="m-0 mb-1 text-md font-medium tracking-[-0.01em] text-ink-950">
-                    {t.name}
-                  </h4>
+                  <h4 className="m-0 mb-1 text-md font-medium tracking-[-0.01em] text-ink-950">{t.name}</h4>
                   <p className="m-0 text-xs leading-[1.5] text-ink-500">{t.desc}</p>
                 </div>
-              </a>
+              </>
+            )
+            const cls =
+              'group relative flex flex-col gap-4 rounded-lg border border-line bg-surface p-6 no-underline transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-md'
+            return t.path ? (
+              <Link key={t.name} to={t.path} className={cls}>{inner}</Link>
+            ) : (
+              <a key={t.name} href="#" className={cls}>{inner}</a>
             )
           })}
         </div>
@@ -1032,14 +990,14 @@ function RelatedTools() {
 
 /* ---------- Page ---------- */
 
-export default function InvoiceGeneratorPage() {
+export default function ProformaInvoiceGeneratorPage() {
   return (
     <>
       <ToolHero />
       <PreviewSection />
       <CalloutStatHook />
       <HowItWorks />
-      <Customize />
+      <Features />
       <PromoBento tone="canvas" />
       <FAQ />
       <RelatedTools />

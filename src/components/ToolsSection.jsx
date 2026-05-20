@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Caret, SearchIcon,
   InvoicePdfIcon, BankStatementIcon, ReceiptIcon, CsvIcon, ExcelToPdfIcon, PdfToExcelIcon, ImageToPdfIcon, ScanIcon,
@@ -19,7 +19,7 @@ import { Caret, SearchIcon,
 const TOOLS = [
   // Document Conversion
   { group: 'conversion', cat: 'convert', name: 'Invoice PDF to Excel',              desc: 'Pull line items, totals, and tax from invoice PDFs into clean spreadsheet rows.', Icon: InvoicePdfIcon, featured: true, path: '/tools/invoice-pdf-to-excel' },
-  { group: 'conversion', cat: 'convert', name: 'Bank Statement PDF to Excel',       desc: 'Turn statement PDFs into reconciled transaction tables — dates, amounts, balances.', Icon: BankStatementIcon, featured: true },
+  { group: 'conversion', cat: 'convert', name: 'Bank Statement PDF to Excel',       desc: 'Turn statement PDFs into reconciled transaction tables — dates, amounts, balances.', Icon: BankStatementIcon, featured: true, path: '/tools/bank-statement-pdf-to-excel' },
   { group: 'conversion', cat: 'convert', name: 'Receipt Image to PDF',              desc: 'Combine phone-camera receipts into a single, ordered, archive-ready PDF.', Icon: ReceiptIcon },
   { group: 'conversion', cat: 'convert', name: 'PDF to CSV',                        desc: 'Extract any tabular PDF into CSV — ready for accounting software import.', Icon: CsvIcon, featured: true },
   { group: 'conversion', cat: 'convert', name: 'Excel to PDF',                      desc: 'Lock a spreadsheet into a fixed-layout PDF — preserves formulas and formatting.', Icon: ExcelToPdfIcon },
@@ -52,9 +52,9 @@ const TOOLS = [
 
   // Invoice Tools
   { group: 'invoicing', cat: 'business', name: 'Invoice Generator',         desc: 'Build branded invoices in seconds — line items, tax, totals, and pay link.', Icon: InvoiceIcon, featured: true, path: '/tools/invoice-generator' },
-  { group: 'invoicing', cat: 'business', name: 'Tax Invoice Generator',     desc: 'Region-aware tax invoices with HSN/SAC, tax breakdowns, and signatures.', Icon: TaxInvoiceIcon },
-  { group: 'invoicing', cat: 'business', name: 'Proforma Invoice Generator', desc: 'Send a proforma quote that converts to a final invoice in one click.', Icon: InvoiceIcon },
-  { group: 'invoicing', cat: 'business', name: 'GST/VAT Invoice Generator', desc: 'Compliant GST or VAT invoices with multi-rate tax and reverse charge.', Icon: VatIcon, featured: true },
+  { group: 'invoicing', cat: 'business', name: 'Tax Invoice Generator',     desc: 'Region-aware tax invoices with HSN/SAC, tax breakdowns, and signatures.', Icon: TaxInvoiceIcon, path: '/tools/tax-invoice-generator' },
+  { group: 'invoicing', cat: 'business', name: 'Proforma Invoice Generator', desc: 'Send a proforma quote that converts to a final invoice in one click.', Icon: InvoiceIcon, path: '/tools/proforma-invoice-generator' },
+  { group: 'invoicing', cat: 'business', name: 'GST/VAT Invoice Generator', desc: 'Compliant GST or VAT invoices with multi-rate tax and reverse charge.', Icon: VatIcon, featured: true, path: '/tools/gst-vat-invoice-generator' },
   { group: 'invoicing', cat: 'business', name: 'Freelance Invoice Generator', desc: 'Hours, day rates, retainers — invoices designed for solo operators.', Icon: InvoiceIcon },
   { group: 'invoicing', cat: 'business', name: 'Recurring Invoice Generator', desc: 'Set a cadence; we draft the next invoice automatically each cycle.', Icon: RecurringIcon },
 
@@ -73,14 +73,14 @@ const TOOLS = [
   { group: 'documents', cat: 'business', name: 'Financial Report Generator', desc: 'Branded monthly or quarterly reports with charts and commentary.', Icon: ReportIcon },
 
   // Accounting Helpers
-  { group: 'accounting', cat: 'business', name: 'Profit & Loss Statement',         desc: 'P&L from a CSV or trial balance — exported as a presentation-ready PDF.', Icon: PnlIcon, featured: true },
-  { group: 'accounting', cat: 'business', name: 'Cash Flow Statement',             desc: 'Operating, investing, and financing cash flows with auto-totals.', Icon: CashFlowIcon },
-  { group: 'accounting', cat: 'business', name: 'Balance Sheet Generator',         desc: 'Assets, liabilities, equity — tied out to the cent and PDF-exported.', Icon: BalanceIcon },
-  { group: 'accounting', cat: 'business', name: 'Income Statement Generator',      desc: 'Revenue, expenses, and net income — formatted for stakeholders.', Icon: ReportIcon },
-  { group: 'accounting', cat: 'business', name: 'Expense Tracker Sheet',           desc: 'Log every business expense with category, vendor, and reimbursement status.', Icon: ExpenseIcon },
-  { group: 'accounting', cat: 'business', name: 'Accounts Payable Report',         desc: 'Outstanding bills, vendor totals, and ageing buckets at a glance.', Icon: InvoiceIcon },
-  { group: 'accounting', cat: 'business', name: 'Accounts Receivable Report',      desc: 'Customer balances, ageing analysis, and overdue alerts.', Icon: InvoicePdfIcon },
-  { group: 'accounting', cat: 'business', name: 'General Ledger Generator',        desc: 'Full transaction history exported in chronological, audit-ready order.', Icon: LedgerIcon },
+  { group: 'accounting', cat: 'business', name: 'Profit & Loss Statement',         desc: 'P&L from a CSV or trial balance — exported as a presentation-ready PDF.', Icon: PnlIcon, featured: true, path: '/tools/profit-loss-statement' },
+  { group: 'accounting', cat: 'business', name: 'Cash Flow Statement',             desc: 'Operating, investing, and financing cash flows with auto-totals.', Icon: CashFlowIcon, path: '/tools/cash-flow-statement' },
+  { group: 'accounting', cat: 'business', name: 'Balance Sheet Generator',         desc: 'Assets, liabilities, equity — tied out to the cent and PDF-exported.', Icon: BalanceIcon, path: '/tools/balance-sheet-generator' },
+  { group: 'accounting', cat: 'business', name: 'Income Statement Generator',      desc: 'Revenue, expenses, and net income — formatted for stakeholders.', Icon: ReportIcon, path: '/tools/income-statement-generator' },
+  { group: 'accounting', cat: 'business', name: 'Expense Tracker Sheet',           desc: 'Log every business expense with category, vendor, and reimbursement status.', Icon: ExpenseIcon, path: '/tools/expense-tracker-sheet' },
+  { group: 'accounting', cat: 'business', name: 'Accounts Payable Report',         desc: 'Outstanding bills, vendor totals, and ageing buckets at a glance.', Icon: InvoiceIcon, path: '/tools/accounts-payable-report' },
+  { group: 'accounting', cat: 'business', name: 'Accounts Receivable Report',      desc: 'Customer balances, ageing analysis, and overdue alerts.', Icon: InvoicePdfIcon, path: '/tools/accounts-receivable-report' },
+  { group: 'accounting', cat: 'business', name: 'General Ledger Generator',        desc: 'Full transaction history exported in chronological, audit-ready order.', Icon: LedgerIcon, path: '/tools/general-ledger-generator' },
   { group: 'accounting', cat: 'business', name: 'Trial Balance Generator',         desc: 'Debits and credits balanced and locked, ready for the auditor.', Icon: ReconcileIcon },
   { group: 'accounting', cat: 'business', name: 'Monthly Financial Summary',       desc: 'A one-page roll-up of revenue, expenses, and net for the month.', Icon: ReportIcon, featured: true },
   { group: 'accounting', cat: 'business', name: 'Revenue Report Generator',        desc: 'Revenue by product, segment, or month with sortable totals and trend.', Icon: ForecastIcon },
@@ -95,19 +95,19 @@ const TOOLS = [
   { group: 'accounting', cat: 'business', name: 'Inventory Valuation Report',      desc: 'Stock-on-hand valued at cost, retail, or moving average.', Icon: InventoryIcon },
 
   // Tax & Banking
-  { group: 'tax', cat: 'business', name: 'Tax Calculation Sheet',                desc: 'Income, slabs, deductions — a clean working sheet for client filings.', Icon: PercentIcon, featured: true },
-  { group: 'tax', cat: 'business', name: 'VAT Calculator PDF Export',            desc: 'Inline VAT/sales-tax calculations on any invoice, exported to PDF.', Icon: VatIcon },
-  { group: 'tax', cat: 'business', name: 'Payroll Tax Report Generator',         desc: 'Employer withholding summaries, ready for filing or audit.', Icon: PayrollIcon },
-  { group: 'tax', cat: 'business', name: 'Bank Reconciliation Sheet',            desc: 'Match book balances to bank statements with exception highlighting.', Icon: ReconcileIcon },
-  { group: 'tax', cat: 'business', name: 'EMI Schedule PDF',                     desc: 'Loan EMI schedules with principal/interest split for each period.', Icon: EmiIcon },
-  { group: 'tax', cat: 'business', name: 'Loan Amortization PDF',                desc: 'Full amortization tables — fixed, floating, or step-up structures.', Icon: AmortIcon },
-  { group: 'tax', cat: 'business', name: 'GST Calculation Sheet',                desc: 'GST workings with HSN/SAC codes, multi-rate, and reverse-charge support.', Icon: VatIcon },
-  { group: 'tax', cat: 'business', name: 'Income Tax Estimator PDF',             desc: 'Estimate annual liability across slabs, deductions, and exemptions.', Icon: PercentIcon },
-  { group: 'tax', cat: 'business', name: 'Sales Tax Report Generator',           desc: 'US/CA sales-tax filings broken down by state, county, and rate.', Icon: PercentIcon },
-  { group: 'tax', cat: 'business', name: 'Tax Deduction Summary',                desc: 'Section-wise deductions claimed, with proof-of-document column.', Icon: VatIcon },
-  { group: 'tax', cat: 'business', name: 'Bank Statement Analyzer',              desc: 'Categorise every line of a statement — vendor, type, recurring vs one-off.', Icon: BankStatementIcon },
-  { group: 'tax', cat: 'business', name: 'Interest Calculation Sheet',           desc: 'Simple, compound, or reducing-balance interest with period-by-period rows.', Icon: PercentIcon },
-  { group: 'tax', cat: 'business', name: 'Monthly Loan Payment Generator',       desc: 'Calculate monthly outflow with principal/interest split for any loan.', Icon: EmiIcon },
+  { group: 'tax', cat: 'business', name: 'Tax Calculation Sheet',                desc: 'Income, slabs, deductions — a clean working sheet for client filings.', Icon: PercentIcon, featured: true, path: '/tools/tax-calculation-sheet' },
+  { group: 'tax', cat: 'business', name: 'VAT Calculator PDF Export',            desc: 'Inline VAT/sales-tax calculations on any invoice, exported to PDF.', Icon: VatIcon, path: '/tools/vat-calculator-pdf-export' },
+  { group: 'tax', cat: 'business', name: 'Payroll Tax Report Generator',         desc: 'Employer withholding summaries, ready for filing or audit.', Icon: PayrollIcon, path: '/tools/payroll-tax-report' },
+  { group: 'tax', cat: 'business', name: 'Bank Reconciliation Sheet',            desc: 'Match book balances to bank statements with exception highlighting.', Icon: ReconcileIcon, path: '/tools/bank-reconciliation-sheet' },
+  { group: 'tax', cat: 'business', name: 'EMI Schedule PDF',                     desc: 'Loan EMI schedules with principal/interest split for each period.', Icon: EmiIcon, path: '/tools/emi-schedule' },
+  { group: 'tax', cat: 'business', name: 'Loan Amortization PDF',                desc: 'Full amortization tables — fixed, floating, or step-up structures.', Icon: AmortIcon, path: '/tools/loan-amortization' },
+  { group: 'tax', cat: 'business', name: 'GST Calculation Sheet',                desc: 'GST workings with HSN/SAC codes, multi-rate, and reverse-charge support.', Icon: VatIcon, path: '/tools/gst-calculation-sheet' },
+  { group: 'tax', cat: 'business', name: 'Income Tax Estimator PDF',             desc: 'Estimate annual liability across slabs, deductions, and exemptions.', Icon: PercentIcon, path: '/tools/income-tax-estimator' },
+  { group: 'tax', cat: 'business', name: 'Sales Tax Report Generator',           desc: 'US/CA sales-tax filings broken down by state, county, and rate.', Icon: PercentIcon, path: '/tools/sales-tax-report' },
+  { group: 'tax', cat: 'business', name: 'Tax Deduction Summary',                desc: 'Section-wise deductions claimed, with proof-of-document column.', Icon: VatIcon, path: '/tools/tax-deduction-summary' },
+  { group: 'tax', cat: 'business', name: 'Bank Statement Analyzer',              desc: 'Categorise every line of a statement — vendor, type, recurring vs one-off.', Icon: BankStatementIcon, path: '/tools/bank-statement-analyzer' },
+  { group: 'tax', cat: 'business', name: 'Interest Calculation Sheet',           desc: 'Simple, compound, or reducing-balance interest with period-by-period rows.', Icon: PercentIcon, path: '/tools/interest-calculation-sheet' },
+  { group: 'tax', cat: 'business', name: 'Monthly Loan Payment Generator',       desc: 'Calculate monthly outflow with principal/interest split for any loan.', Icon: EmiIcon, path: '/tools/monthly-loan-payment' },
   { group: 'tax', cat: 'business', name: 'Credit Card Payment Schedule',         desc: 'Plan minimum or accelerated card payoff with total interest paid.', Icon: CreditCardIcon },
   { group: 'tax', cat: 'business', name: 'Mortgage Payment PDF',                 desc: 'Full mortgage schedule — principal, interest, escrow, taxes, balance.', Icon: AmortIcon },
   { group: 'tax', cat: 'business', name: 'Savings Interest Report',              desc: 'Compound savings growth across years with deposit and withdrawal lines.', Icon: CoinStackIcon },
@@ -117,12 +117,12 @@ const TOOLS = [
   { group: 'tax', cat: 'business', name: 'Investment Return Calculation Sheet',  desc: 'CAGR, IRR, and absolute return on any holding period.', Icon: ForecastIcon },
 
   // Small Business Utilities (Contracts & letters)
-  { group: 'contracts', cat: 'business', name: 'Client Contract Generator',  desc: 'Engagement contracts with scope, rates, and term — lawyer-reviewed templates.', Icon: ContractIcon },
-  { group: 'contracts', cat: 'business', name: 'NDA Generator',              desc: 'Mutual or one-way NDAs — customise parties, term, and jurisdiction.', Icon: NdaIcon },
-  { group: 'contracts', cat: 'business', name: 'Service Agreement Generator', desc: 'SoW + master service agreements you can re-use across clients.', Icon: ContractIcon },
-  { group: 'contracts', cat: 'business', name: 'Business Proposal Generator', desc: 'Pitch-ready proposals with pricing tables and executive summary.', Icon: ProposalIcon },
-  { group: 'contracts', cat: 'business', name: 'Payment Reminder Letter',    desc: 'Polite but firm reminder letters — pre-30-day, 30+, and final notice.', Icon: BellIcon },
-  { group: 'contracts', cat: 'business', name: 'Late Payment Notice',        desc: 'Statutory late-payment notices with interest calculation included.', Icon: LetterIcon },
+  { group: 'contracts', cat: 'business', name: 'Client Contract Generator',  desc: 'Engagement contracts with scope, rates, and term — lawyer-reviewed templates.', Icon: ContractIcon, path: '/tools/client-contract-generator' },
+  { group: 'contracts', cat: 'business', name: 'NDA Generator',              desc: 'Mutual or one-way NDAs — customise parties, term, and jurisdiction.', Icon: NdaIcon, path: '/tools/nda-generator' },
+  { group: 'contracts', cat: 'business', name: 'Service Agreement Generator', desc: 'SoW + master service agreements you can re-use across clients.', Icon: ContractIcon, path: '/tools/service-agreement-generator' },
+  { group: 'contracts', cat: 'business', name: 'Business Proposal Generator', desc: 'Pitch-ready proposals with pricing tables and executive summary.', Icon: ProposalIcon, path: '/tools/business-proposal-generator' },
+  { group: 'contracts', cat: 'business', name: 'Payment Reminder Letter',    desc: 'Polite but firm reminder letters — pre-30-day, 30+, and final notice.', Icon: BellIcon, path: '/tools/payment-reminder-letter' },
+  { group: 'contracts', cat: 'business', name: 'Late Payment Notice',        desc: 'Statutory late-payment notices with interest calculation included.', Icon: LetterIcon, path: '/tools/late-payment-notice' },
 ]
 
 /* color per filter group — each tab has its own identity */
@@ -195,10 +195,39 @@ function ToolTile({ tool }) {
 
 const PAGE_LIMIT = 16
 
+/** Parse `#tools?q=foo` style hash → { q } */
+function readHashQuery() {
+  if (typeof window === 'undefined') return ''
+  const hash = window.location.hash || ''
+  const i = hash.indexOf('?')
+  if (i === -1) return ''
+  try {
+    const p = new URLSearchParams(hash.slice(i + 1))
+    return p.get('q') || ''
+  } catch {
+    return ''
+  }
+}
+
 export default function ToolsSection() {
   const [filter, setFilter] = useState('all')
   const [showAll, setShowAll] = useState(false)
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(() => readHashQuery())
+
+  // Listen for hash changes (e.g. when the header search submits)
+  useEffect(() => {
+    const onHash = () => {
+      const q = readHashQuery()
+      setQuery(q)
+      if (q && typeof window !== 'undefined') {
+        // Scroll into view so the user sees the filtered results
+        const el = document.getElementById('tools')
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
 
   // 1) Apply category filter (for "All", surface featured first)
   const baseList =
@@ -248,51 +277,53 @@ export default function ToolsSection() {
           </p>
         </div>
 
-        {/* Search */}
-        <div className="relative mb-5 max-w-[640px]">
-          <SearchIcon
-            size={16}
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-500"
-          />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={`Search ${TOOLS.length} tools by name or keyword…`}
-            aria-label="Search tools"
-            className="w-full rounded-md border border-line bg-surface py-3 pl-11 pr-11 text-[14px] text-ink-950 placeholder:text-ink-500 transition-colors focus:border-crimson-500/60 focus:outline-none focus:ring-2 focus:ring-crimson-500/25"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery('')}
-              aria-label="Clear search"
-              className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-950"
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-                <path d="M4 4l8 8M12 4l-8 8" />
-              </svg>
-            </button>
-          )}
-        </div>
+        {/* Filter tabs + Search — horizontally aligned */}
+        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+          <div className="flex flex-wrap gap-2">
+            {FILTERS.map((f) => {
+              const active = filter === f.id
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => handleFilter(f.id)}
+                  className={`rounded-md border px-3.5 py-2 font-sans text-[13px] font-medium transition-colors ${
+                    active
+                      ? 'border-crimson-600 bg-crimson-500 text-white shadow-[0_4px_14px_-4px_rgba(237,40,40,0.5)]'
+                      : 'border-line-strong bg-surface text-ink-700 hover:bg-ink-100 hover:text-ink-950'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              )
+            })}
+          </div>
 
-        <div className="mb-8 flex flex-wrap gap-2">
-          {FILTERS.map((f) => {
-            const active = filter === f.id
-            return (
+          <div className="relative w-full shrink-0 lg:w-[320px]">
+            <SearchIcon
+              size={15}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-500"
+            />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={`Search ${TOOLS.length} tools…`}
+              aria-label="Search tools"
+              className="w-full rounded-md border border-line bg-surface py-2.5 pl-10 pr-10 text-[13px] text-ink-950 placeholder:text-ink-500 transition-colors focus:border-crimson-500/60 focus:outline-none focus:ring-2 focus:ring-crimson-500/25"
+            />
+            {query && (
               <button
-                key={f.id}
-                onClick={() => handleFilter(f.id)}
-                className={`rounded-md border px-3.5 py-2 font-sans text-[13px] font-medium transition-colors ${
-                  active
-                    ? 'border-crimson-600 bg-crimson-500 text-white shadow-[0_4px_14px_-4px_rgba(237,40,40,0.5)]'
-                    : 'border-line-strong bg-surface text-ink-700 hover:bg-ink-100 hover:text-ink-950'
-                }`}
+                type="button"
+                onClick={() => setQuery('')}
+                aria-label="Clear search"
+                className="absolute right-2.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-950"
               >
-                {f.label}
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                  <path d="M4 4l8 8M12 4l-8 8" />
+                </svg>
               </button>
-            )
-          })}
+            )}
+          </div>
         </div>
 
         {visible.length > 0 ? (

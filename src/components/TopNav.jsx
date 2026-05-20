@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrandMark, Caret, ArrowRight } from './icons'
+import { BrandMark, Caret, ArrowRight, SearchIcon } from './icons'
 
 /* ---------- Mega-menu data ---------- */
 
@@ -174,6 +174,51 @@ function MegaMenu({ menu }) {
   )
 }
 
+/* ---------- Header search ---------- */
+
+function HeaderSearch({ onSubmit, compact = false }) {
+  const [q, setQ] = useState('')
+
+  const submit = (e) => {
+    e?.preventDefault()
+    const value = q.trim()
+    if (!value) return
+    // Route to home + #tools with a query string in the hash
+    const target = `/#tools?q=${encodeURIComponent(value)}`
+    if (typeof window !== 'undefined') {
+      // If we're already on the home page, just update the hash so
+      // the hashchange listener in ToolsSection picks it up.
+      if (window.location.pathname === '/') {
+        window.location.hash = `tools?q=${encodeURIComponent(value)}`
+      } else {
+        window.location.href = target
+      }
+    }
+    onSubmit?.()
+  }
+
+  return (
+    <form
+      role="search"
+      onSubmit={submit}
+      className={`relative ${compact ? 'w-full' : 'w-[220px] xl:w-[280px]'}`}
+    >
+      <SearchIcon
+        size={14}
+        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-500"
+      />
+      <input
+        type="search"
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Search tools…"
+        aria-label="Search tools"
+        className="w-full rounded-md border border-line bg-surface py-2 pl-9 pr-3 text-[13px] text-ink-950 placeholder:text-ink-500 transition-colors focus:border-crimson-500/60 focus:outline-none focus:ring-2 focus:ring-crimson-500/25"
+      />
+    </form>
+  )
+}
+
 function NavLink({ href, children, onClick }) {
   return (
     <a
@@ -335,8 +380,12 @@ export default function TopNav() {
           <NavLink href="#tools">All tools</NavLink>
         </div>
 
-        {/* Right-side group: CTA (tablet+) + hamburger (below 939px) */}
-        <div className="ml-auto flex items-center gap-2">
+        {/* Right-side group: search (desktop) + CTA + hamburger */}
+        <div className="ml-auto flex items-center gap-2.5">
+          <div className="hidden min-[939px]:block">
+            <HeaderSearch />
+          </div>
+
           <a
             href="https://go.sonchoy.com/pdfFiller"
             target="_blank"
@@ -385,6 +434,9 @@ export default function TopNav() {
           </div>
 
           <div className="flex-1 overflow-y-auto px-4 pb-6">
+            <div className="py-4">
+              <HeaderSearch compact onSubmit={closeMobile} />
+            </div>
             {MENU_IDS.map((id) => (
               <MobileSection
                 key={id}
