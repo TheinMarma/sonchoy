@@ -53,6 +53,7 @@ const TaxSummaryReportPage         = lazy(() => import('./pages/TaxSummaryReport
 const BudgetPlanningPage           = lazy(() => import('./pages/BudgetPlanningPage'))
 const FinancialForecastPage        = lazy(() => import('./pages/FinancialForecastPage'))
 const QuotationGeneratorPage       = lazy(() => import('./pages/QuotationGeneratorPage'))
+const ReceiptGeneratorPage         = lazy(() => import('./pages/ReceiptGeneratorPage'))
 
 function ToolPageFallback() {
   return (
@@ -253,6 +254,10 @@ export default function App() {
           <Route
             path="/tools/quotation-generator"
             element={<QuotationGeneratorPage />}
+          />
+          <Route
+            path="/tools/receipt-generator"
+            element={<ReceiptGeneratorPage />}
           />
         </Routes>
       </Suspense>
