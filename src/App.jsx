@@ -50,6 +50,7 @@ const RevenueReportPage            = lazy(() => import('./pages/RevenueReportPag
 const BusinessExpenseBreakdownPage = lazy(() => import('./pages/BusinessExpenseBreakdownPage'))
 const PayrollSummaryPage           = lazy(() => import('./pages/PayrollSummaryPage'))
 const TaxSummaryReportPage         = lazy(() => import('./pages/TaxSummaryReportPage'))
+const BudgetPlanningPage           = lazy(() => import('./pages/BudgetPlanningPage'))
 
 function ToolPageFallback() {
   return (
@@ -238,6 +239,10 @@ export default function App() {
           <Route
             path="/tools/tax-summary-report"
             element={<TaxSummaryReportPage />}
+          />
+          <Route
+            path="/tools/budget-planning-sheet"
+            element={<BudgetPlanningPage />}
           />
         </Routes>
       </Suspense>

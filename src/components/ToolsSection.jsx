@@ -87,7 +87,7 @@ const TOOLS = [
   { group: 'accounting', cat: 'business', name: 'Business Expense Breakdown',      desc: 'Expenses by category with percentage splits and month-over-month trend.', Icon: BudgetIcon, path: '/tools/business-expense-breakdown' },
   { group: 'accounting', cat: 'business', name: 'Payroll Summary Generator',       desc: 'Wages, deductions, and employer taxes — period-by-period.', Icon: PayrollIcon, path: '/tools/payroll-summary' },
   { group: 'accounting', cat: 'business', name: 'Tax Summary Report',              desc: 'Tax collected, owed, and remitted across periods and regions.', Icon: PercentIcon, path: '/tools/tax-summary-report' },
-  { group: 'accounting', cat: 'business', name: 'Budget Planning Sheet',           desc: 'Build budgets line-by-line with variance tracking columns.', Icon: TemplateIcon },
+  { group: 'accounting', cat: 'business', name: 'Budget Planning Sheet',           desc: 'Build budgets line-by-line with variance tracking columns.', Icon: TemplateIcon, path: '/tools/budget-planning-sheet' },
   { group: 'accounting', cat: 'business', name: 'Financial Forecast Generator',    desc: 'Project revenue and expenses forward with optimistic / base / downside columns.', Icon: ForecastIcon },
   { group: 'accounting', cat: 'business', name: 'Profit Margin Calculator',        desc: 'Gross, operating, and net margins on every revenue line — PDF-exported.', Icon: PercentIcon },
   { group: 'accounting', cat: 'business', name: 'Break-Even Analysis',             desc: 'Find the units or revenue where fixed costs cross profit.', Icon: AmortIcon },
