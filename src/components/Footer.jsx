@@ -1,9 +1,58 @@
+import { Link } from 'react-router-dom'
+
 const COLS = [
-  { title: 'Invoicing',     links: ['Invoice generator', 'Tax invoice', 'GST/VAT invoice', 'Recurring invoice', 'Freelance invoice', 'Invoice template'] },
-  { title: 'Documents',     links: ['Quotation', 'Receipt', 'Purchase order', 'Salary slip', 'Expense report', 'Financial report'] },
-  { title: 'Accounting',    links: ['Profit & Loss', 'Cash Flow', 'Balance Sheet', 'Trial balance', 'General ledger', 'Financial forecast'] },
-  { title: 'Tax & banking', links: ['Tax calculation sheet', 'GST calculation', 'Bank reconciliation', 'EMI schedule', 'Mortgage payment', 'Investment return'] },
-  { title: 'PDF & convert', links: ['Bank statement → Excel', 'Invoice PDF → Excel', 'OCR receipt to text', 'Merge financial PDFs', 'Compress invoices', 'Add signature'] },
+  {
+    title: 'Invoicing & Quotes',
+    links: [
+      ['Invoice Generator',          '/tools/invoice-generator'],
+      ['Tax Invoice Generator',      '/tools/tax-invoice-generator'],
+      ['Proforma Invoice',           '/tools/proforma-invoice-generator'],
+      ['GST / VAT Invoice',          '/tools/gst-vat-invoice-generator'],
+      ['Quotation Generator',        '/tools/quotation-generator'],
+    ],
+  },
+  {
+    title: 'Accounting & Reports',
+    links: [
+      ['Profit & Loss Statement',    '/tools/profit-loss-statement'],
+      ['Cash Flow Statement',        '/tools/cash-flow-statement'],
+      ['Balance Sheet',              '/tools/balance-sheet-generator'],
+      ['Trial Balance',              '/tools/trial-balance'],
+      ['Monthly Financial Summary',  '/tools/monthly-financial-summary'],
+      ['Budget Planning Sheet',      '/tools/budget-planning-sheet'],
+      ['Financial Forecast',         '/tools/financial-forecast'],
+    ],
+  },
+  {
+    title: 'Tax & Banking',
+    links: [
+      ['Tax Calculation Sheet',      '/tools/tax-calculation-sheet'],
+      ['GST Calculation Sheet',      '/tools/gst-calculation-sheet'],
+      ['Income Tax Estimator',       '/tools/income-tax-estimator'],
+      ['Bank Reconciliation',        '/tools/bank-reconciliation-sheet'],
+      ['EMI Schedule',               '/tools/emi-schedule'],
+      ['Mortgage Payment',           '/tools/mortgage-payment'],
+      ['Interest Calculation',       '/tools/interest-calculation-sheet'],
+    ],
+  },
+  {
+    title: 'Contracts & Letters',
+    links: [
+      ['Client Contract',            '/tools/client-contract-generator'],
+      ['NDA Generator',              '/tools/nda-generator'],
+      ['Service Agreement',          '/tools/service-agreement-generator'],
+      ['Business Proposal',          '/tools/business-proposal-generator'],
+      ['Payment Reminder Letter',    '/tools/payment-reminder-letter'],
+      ['Late Payment Notice',        '/tools/late-payment-notice'],
+    ],
+  },
+  {
+    title: 'PDF & Convert',
+    links: [
+      ['Invoice PDF to Excel',       '/tools/invoice-pdf-to-excel'],
+      ['Bank Statement PDF to Excel', '/tools/bank-statement-pdf-to-excel'],
+    ],
+  },
 ]
 
 export default function Footer() {
@@ -25,14 +74,14 @@ export default function Footer() {
               <h6 className="mb-4 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ink-500 m-0">
                 {col.title}
               </h6>
-              {col.links.map((label) => (
-                <a
+              {col.links.map(([label, href]) => (
+                <Link
                   key={label}
-                  href="#"
+                  to={href}
                   className="block py-1.5 text-[13px] text-ink-700 no-underline hover:text-ink-950 transition-colors"
                 >
                   {label}
-                </a>
+                </Link>
               ))}
             </div>
           ))}

@@ -1,5 +1,25 @@
 import { useEffect, useState } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { BrandMark, Caret, ArrowRight, SearchIcon } from './icons'
+
+/* Click handler for in-page hash anchors (#tools).
+   When already on the homepage, just scroll. When on a sub-route, navigate
+   to /#tools so ScrollToTop scrolls to the section after the route mounts. */
+function useToolsAnchorHandler() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  return (e) => {
+    if (e?.metaKey || e?.ctrlKey || e?.shiftKey || (e && e.button !== 0 && e.button !== undefined)) return
+    e?.preventDefault?.()
+    if (location.pathname === '/') {
+      const el = document.getElementById('tools')
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      else window.location.hash = 'tools'
+    } else {
+      navigate('/#tools')
+    }
+  }
+}
 
 /* ---------- Mega-menu data ---------- */
 
@@ -131,6 +151,7 @@ function Brand({ onClick }) {
 /* ---------- Desktop mega menu ---------- */
 
 function MegaMenu({ menu }) {
+  const handleToolsClick = useToolsAnchorHandler()
   return (
     <div className="absolute left-0 top-full z-50 pt-2">
       <div className="w-[640px] rounded-lg border border-line bg-surface p-5 shadow-xl">
@@ -159,7 +180,8 @@ function MegaMenu({ menu }) {
         </div>
         <div className="mt-4 flex items-center justify-between border-t border-line pt-3">
           <a
-            href="#tools"
+            href="/#tools"
+            onClick={handleToolsClick}
             className="inline-flex items-center gap-2 px-2 text-[13px] font-medium text-crimson-300 no-underline hover:text-crimson-400"
           >
             {menu.seeAll}
@@ -220,10 +242,15 @@ function HeaderSearch({ onSubmit, compact = false }) {
 }
 
 function NavLink({ href, children, onClick }) {
+  const handleToolsClick = useToolsAnchorHandler()
+  const isToolsAnchor = href === '#tools' || href === '/#tools'
   return (
     <a
-      href={href}
-      onClick={onClick}
+      href={isToolsAnchor ? '/#tools' : href}
+      onClick={(e) => {
+        if (isToolsAnchor) handleToolsClick(e)
+        onClick?.(e)
+      }}
       className="flex items-center gap-1.5 px-3.5 py-2 text-[14px] font-medium text-ink-700 rounded-sm hover:bg-surface hover:text-ink-950 no-underline transition-colors"
     >
       {children}
@@ -268,6 +295,7 @@ function NavMenuTrigger({ id, openMenu, setOpenMenu }) {
 function MobileSection({ id, expanded, setExpanded, onClose }) {
   const menu = MENUS[id]
   const isExp = expanded === id
+  const handleToolsClick = useToolsAnchorHandler()
   return (
     <div className="border-b border-line">
       <button
@@ -316,8 +344,8 @@ function MobileSection({ id, expanded, setExpanded, onClose }) {
               </div>
             ))}
             <a
-              href="#tools"
-              onClick={onClose}
+              href="/#tools"
+              onClick={(e) => { handleToolsClick(e); onClose?.(e) }}
               className="inline-flex items-center gap-2 text-[13px] font-medium text-crimson-300 no-underline hover:text-crimson-400"
             >
               {menu.seeAll}
@@ -336,6 +364,7 @@ export default function TopNav() {
   const [openMenu, setOpenMenu] = useState(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpanded, setMobileExpanded] = useState(null)
+  const handleToolsClick = useToolsAnchorHandler()
 
   // Close on Escape
   useEffect(() => {
@@ -447,8 +476,8 @@ export default function TopNav() {
               />
             ))}
             <a
-              href="#tools"
-              onClick={closeMobile}
+              href="/#tools"
+              onClick={(e) => { handleToolsClick(e); closeMobile() }}
               className="block border-b border-line py-4 text-[16px] font-medium text-ink-950 no-underline"
             >
               All tools

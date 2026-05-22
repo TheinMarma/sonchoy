@@ -51,6 +51,8 @@ const BusinessExpenseBreakdownPage = lazy(() => import('./pages/BusinessExpenseB
 const PayrollSummaryPage           = lazy(() => import('./pages/PayrollSummaryPage'))
 const TaxSummaryReportPage         = lazy(() => import('./pages/TaxSummaryReportPage'))
 const BudgetPlanningPage           = lazy(() => import('./pages/BudgetPlanningPage'))
+const FinancialForecastPage        = lazy(() => import('./pages/FinancialForecastPage'))
+const QuotationGeneratorPage       = lazy(() => import('./pages/QuotationGeneratorPage'))
 
 function ToolPageFallback() {
   return (
@@ -243,6 +245,14 @@ export default function App() {
           <Route
             path="/tools/budget-planning-sheet"
             element={<BudgetPlanningPage />}
+          />
+          <Route
+            path="/tools/financial-forecast"
+            element={<FinancialForecastPage />}
+          />
+          <Route
+            path="/tools/quotation-generator"
+            element={<QuotationGeneratorPage />}
           />
         </Routes>
       </Suspense>

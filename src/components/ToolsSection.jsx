@@ -64,7 +64,7 @@ const TOOLS = [
   { group: 'invoicing', cat: 'business', name: 'Invoice PDF Exporter',      desc: 'Bulk-export draft invoices to print-ready, archivable PDFs.', Icon: ExportIcon },
 
   // Business Documents
-  { group: 'documents', cat: 'business', name: 'Quotation Generator',       desc: 'Itemised quotes with totals, tax, validity, and one-click conversion to invoice.', Icon: QuoteIcon, featured: true },
+  { group: 'documents', cat: 'business', name: 'Quotation Generator',       desc: 'Itemised quotes with totals, tax, validity, and one-click conversion to invoice.', Icon: QuoteIcon, featured: true, path: '/tools/quotation-generator' },
   { group: 'documents', cat: 'business', name: 'Receipt Generator',         desc: 'Issue clean payment receipts the moment a client clears an invoice.', Icon: ReceiptIcon },
   { group: 'documents', cat: 'business', name: 'Purchase Order Generator',  desc: 'Send vendors POs that match your accounting system numbering.', Icon: POIcon },
   { group: 'documents', cat: 'business', name: 'Delivery Note Generator',   desc: 'Pack-list PDFs that ship alongside goods — no pricing visible.', Icon: DeliveryIcon },
@@ -88,7 +88,7 @@ const TOOLS = [
   { group: 'accounting', cat: 'business', name: 'Payroll Summary Generator',       desc: 'Wages, deductions, and employer taxes — period-by-period.', Icon: PayrollIcon, path: '/tools/payroll-summary' },
   { group: 'accounting', cat: 'business', name: 'Tax Summary Report',              desc: 'Tax collected, owed, and remitted across periods and regions.', Icon: PercentIcon, path: '/tools/tax-summary-report' },
   { group: 'accounting', cat: 'business', name: 'Budget Planning Sheet',           desc: 'Build budgets line-by-line with variance tracking columns.', Icon: TemplateIcon, path: '/tools/budget-planning-sheet' },
-  { group: 'accounting', cat: 'business', name: 'Financial Forecast Generator',    desc: 'Project revenue and expenses forward with optimistic / base / downside columns.', Icon: ForecastIcon },
+  { group: 'accounting', cat: 'business', name: 'Financial Forecast Generator',    desc: 'Project revenue and expenses forward with optimistic / base / downside columns.', Icon: ForecastIcon, path: '/tools/financial-forecast' },
   { group: 'accounting', cat: 'business', name: 'Profit Margin Calculator',        desc: 'Gross, operating, and net margins on every revenue line — PDF-exported.', Icon: PercentIcon },
   { group: 'accounting', cat: 'business', name: 'Break-Even Analysis',             desc: 'Find the units or revenue where fixed costs cross profit.', Icon: AmortIcon },
   { group: 'accounting', cat: 'business', name: 'Annual Financial Report',         desc: 'Year-end report with charts, commentary, and signed cover page.', Icon: PnlIcon },
