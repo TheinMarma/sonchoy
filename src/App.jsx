@@ -41,6 +41,15 @@ const TaxDeductionSummaryPage      = lazy(() => import('./pages/TaxDeductionSumm
 const BankStatementAnalyzerPage    = lazy(() => import('./pages/BankStatementAnalyzerPage'))
 const InterestCalcPage             = lazy(() => import('./pages/InterestCalcPage'))
 const MonthlyLoanPaymentPage       = lazy(() => import('./pages/MonthlyLoanPaymentPage'))
+const CreditCardPaymentSchedulePage = lazy(() => import('./pages/CreditCardPaymentSchedulePage'))
+const MortgagePaymentPage          = lazy(() => import('./pages/MortgagePaymentPage'))
+const SavingsInterestReportPage    = lazy(() => import('./pages/SavingsInterestReportPage'))
+const TrialBalancePage             = lazy(() => import('./pages/TrialBalancePage'))
+const MonthlyFinancialSummaryPage  = lazy(() => import('./pages/MonthlyFinancialSummaryPage'))
+const RevenueReportPage            = lazy(() => import('./pages/RevenueReportPage'))
+const BusinessExpenseBreakdownPage = lazy(() => import('./pages/BusinessExpenseBreakdownPage'))
+const PayrollSummaryPage           = lazy(() => import('./pages/PayrollSummaryPage'))
+const TaxSummaryReportPage         = lazy(() => import('./pages/TaxSummaryReportPage'))
 
 function ToolPageFallback() {
   return (
@@ -193,6 +202,42 @@ export default function App() {
           <Route
             path="/tools/monthly-loan-payment"
             element={<MonthlyLoanPaymentPage />}
+          />
+          <Route
+            path="/tools/credit-card-payment-schedule"
+            element={<CreditCardPaymentSchedulePage />}
+          />
+          <Route
+            path="/tools/mortgage-payment"
+            element={<MortgagePaymentPage />}
+          />
+          <Route
+            path="/tools/savings-interest-report"
+            element={<SavingsInterestReportPage />}
+          />
+          <Route
+            path="/tools/trial-balance"
+            element={<TrialBalancePage />}
+          />
+          <Route
+            path="/tools/monthly-financial-summary"
+            element={<MonthlyFinancialSummaryPage />}
+          />
+          <Route
+            path="/tools/revenue-report"
+            element={<RevenueReportPage />}
+          />
+          <Route
+            path="/tools/business-expense-breakdown"
+            element={<BusinessExpenseBreakdownPage />}
+          />
+          <Route
+            path="/tools/payroll-summary"
+            element={<PayrollSummaryPage />}
+          />
+          <Route
+            path="/tools/tax-summary-report"
+            element={<TaxSummaryReportPage />}
           />
         </Routes>
       </Suspense>
