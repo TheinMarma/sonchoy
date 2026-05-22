@@ -30,47 +30,21 @@ const MENUS = {
       {
         title: 'Invoice generators',
         items: [
-          ['Invoice generator',          'General-purpose, branded'],
-          ['Tax invoice',                'HSN/SAC, tax breakdowns'],
-          ['GST / VAT invoice',          'Multi-rate, reverse charge'],
-          ['Proforma invoice',           'Pre-quote, converts later'],
-          ['Recurring invoice',          'Set a cadence, auto-draft'],
-          ['Freelance invoice',          'Hours, day rates, retainers'],
+          ['Invoice generator',          'General-purpose, branded',          '/tools/invoice-generator'],
+          ['Tax invoice',                'HSN/SAC, tax breakdowns',           '/tools/tax-invoice-generator'],
+          ['Proforma invoice',           'Pre-quote, converts later',         '/tools/proforma-invoice-generator'],
+          ['GST / VAT invoice',          'Multi-rate, reverse charge',        '/tools/gst-vat-invoice-generator'],
         ],
       },
       {
-        title: 'Billing utilities',
+        title: 'Quotes & receipts',
         items: [
-          ['Invoice number generator',   'Sequential or fiscal-year'],
-          ['Invoice template builder',   'Reusable branded layouts'],
-          ['Invoice PDF exporter',       'Bulk-export drafts to PDF'],
+          ['Quotation generator',        'Itemised, tax-aware quotes',        '/tools/quotation-generator'],
+          ['Receipt generator',          'Issue on payment received',         '/tools/receipt-generator'],
         ],
       },
     ],
-    seeAll: 'View all 9 invoicing tools',
-  },
-  documents: {
-    label: 'Documents',
-    columns: [
-      {
-        title: 'Sales documents',
-        items: [
-          ['Quotation',                  'Itemised, tax-aware quotes'],
-          ['Receipt',                    'Issue on payment received'],
-          ['Purchase order',             'Vendor-facing POs'],
-          ['Delivery note',              'Pack list, no pricing'],
-        ],
-      },
-      {
-        title: 'Operations',
-        items: [
-          ['Expense report',             'Receipts → categorised PDF'],
-          ['Salary slip',                'Deductions, taxes, YTD'],
-          ['Financial report',           'Monthly/quarterly with charts'],
-        ],
-      },
-    ],
-    seeAll: 'View all 7 document tools',
+    seeAll: 'View all invoicing tools',
   },
   accounting: {
     label: 'Accounting',
@@ -78,58 +52,91 @@ const MENUS = {
       {
         title: 'Statements & ledgers',
         items: [
-          ['Profit & Loss',              'P&L from CSV or trial balance'],
-          ['Cash Flow',                  'Operating, investing, financing'],
-          ['Balance Sheet',              'Tied-out, PDF-exported'],
-          ['Income statement',           'Revenue, expenses, net income'],
-          ['General ledger',             'Chronological transaction log'],
-          ['Trial balance',              'Debits & credits, audit-ready'],
+          ['Profit & Loss',              'P&L from CSV or trial balance',     '/tools/profit-loss-statement'],
+          ['Cash Flow',                  'Operating, investing, financing',   '/tools/cash-flow-statement'],
+          ['Balance Sheet',              'Tied-out, PDF-exported',            '/tools/balance-sheet-generator'],
+          ['Income statement',           'Revenue, expenses, net income',     '/tools/income-statement-generator'],
+          ['General ledger',             'Chronological transaction log',     '/tools/general-ledger-generator'],
+          ['Trial balance',              'Debits & credits, audit-ready',     '/tools/trial-balance'],
+          ['Accounts payable',           'Vendor invoices & ageing',          '/tools/accounts-payable-report'],
+          ['Accounts receivable',        'Customer dues & ageing',            '/tools/accounts-receivable-report'],
         ],
       },
       {
-        title: 'Tax & banking',
+        title: 'Reports & planning',
         items: [
-          ['Tax calculation sheet',      'Income, slabs, deductions'],
-          ['GST / VAT calculator',       'Multi-rate, reverse charge'],
-          ['Bank reconciliation',        'Book vs. statement match'],
-          ['EMI schedule',               'Principal / interest split'],
-          ['Mortgage payment',           'Escrow, taxes, balance'],
-          ['Investment return calc.',    'CAGR, IRR, absolute return'],
+          ['Monthly financial summary',  'P&L, cash, KPIs in one PDF',        '/tools/monthly-financial-summary'],
+          ['Revenue report',             'Channels, segments, growth',        '/tools/revenue-report'],
+          ['Business expense breakdown', 'Category-level spend',              '/tools/business-expense-breakdown'],
+          ['Payroll summary',            'Gross, deductions, net',            '/tools/payroll-summary'],
+          ['Expense tracker sheet',      'Daily logging in XLSX',             '/tools/expense-tracker-sheet'],
+          ['Budget planning sheet',      'Plan vs. actual variance',          '/tools/budget-planning-sheet'],
+          ['Financial forecast',         '12-month projection',               '/tools/financial-forecast'],
         ],
       },
     ],
-    seeAll: 'View all 40 accounting & tax tools',
+    seeAll: 'View all accounting tools',
   },
-  pdf: {
-    label: 'PDF tools',
+  tax: {
+    label: 'Tax & Banking',
     columns: [
       {
-        title: 'Convert & extract',
+        title: 'Tax',
         items: [
-          ['Bank statement → Excel',     'Reconciled rows from PDFs'],
-          ['Invoice PDF → Excel',        'Line items, totals, tax'],
-          ['PDF → CSV',                  'Tabular PDFs to CSV'],
-          ['OCR receipt to text',        'Printed & handwritten'],
-          ['PDF table extractor',        'Every table, structured'],
-          ['Scan → PDF',                 'Stitched, deskewed pages'],
+          ['Tax calculation sheet',      'Income, slabs, deductions',         '/tools/tax-calculation-sheet'],
+          ['GST calculation sheet',      'Multi-rate GST workings',           '/tools/gst-calculation-sheet'],
+          ['VAT calculator',             'Forward + reverse VAT',             '/tools/vat-calculator-pdf-export'],
+          ['Income tax estimator',       'Slab-based estimate',               '/tools/income-tax-estimator'],
+          ['Sales tax report',           'Period totals & filings',           '/tools/sales-tax-report'],
+          ['Tax deduction summary',      'Deductions consolidated',           '/tools/tax-deduction-summary'],
+          ['Tax summary report',         'Year-end tax PDF',                  '/tools/tax-summary-report'],
+          ['Payroll tax report',         'Withholding & contributions',       '/tools/payroll-tax-report'],
         ],
       },
       {
-        title: 'Edit & secure',
+        title: 'Banking & loans',
         items: [
-          ['Merge financial PDFs',       'Invoices + statements'],
-          ['Split PDF statements',       'Per-month, per-account'],
-          ['Compress invoice PDFs',      '60–80% smaller'],
-          ['Add signature to PDF',       'Type, draw, or upload'],
-          ['Password-protect PDF',       'AES-256 encryption'],
+          ['Bank reconciliation',        'Book vs. statement match',          '/tools/bank-reconciliation-sheet'],
+          ['EMI schedule',               'Principal / interest split',        '/tools/emi-schedule'],
+          ['Loan amortization',          'Full amortization table',           '/tools/loan-amortization'],
+          ['Monthly loan payment',       'Affordable EMI calculator',         '/tools/monthly-loan-payment'],
+          ['Credit card schedule',       'Payoff timeline + interest',        '/tools/credit-card-payment-schedule'],
+          ['Mortgage payment',           'Escrow, taxes, balance',            '/tools/mortgage-payment'],
+          ['Savings interest report',    'Compounded projections',            '/tools/savings-interest-report'],
+          ['Interest calculation',       'Simple & compound interest',        '/tools/interest-calculation-sheet'],
         ],
       },
     ],
-    seeAll: 'View all 29 PDF & conversion tools',
+    seeAll: 'View all tax & banking tools',
+  },
+  documents: {
+    label: 'Documents',
+    columns: [
+      {
+        title: 'Contracts',
+        items: [
+          ['Client contract',            'Scope, payment, termination',       '/tools/client-contract-generator'],
+          ['NDA generator',              'Mutual or one-way NDA',             '/tools/nda-generator'],
+          ['Service agreement',          'Services, SLA, deliverables',       '/tools/service-agreement-generator'],
+          ['Business proposal',          'Pitch + pricing in one PDF',        '/tools/business-proposal-generator'],
+        ],
+      },
+      {
+        title: 'Letters & PDF tools',
+        items: [
+          ['Payment reminder letter',    'Polite, dated, branded',            '/tools/payment-reminder-letter'],
+          ['Late payment notice',        'Final-notice with terms',           '/tools/late-payment-notice'],
+          ['Invoice PDF → Excel',        'Line items, totals, tax',           '/tools/invoice-pdf-to-excel'],
+          ['Bank statement → Excel',     'Reconciled rows from PDFs',         '/tools/bank-statement-pdf-to-excel'],
+          ['Bank statement analyzer',    'Insights & categorised spend',      '/tools/bank-statement-analyzer'],
+        ],
+      },
+    ],
+    seeAll: 'View all document & PDF tools',
   },
 }
 
-const MENU_IDS = ['invoicing', 'documents', 'accounting', 'pdf']
+const MENU_IDS = ['invoicing', 'accounting', 'tax', 'documents']
 
 /* ---------- Brand mark (shared by desktop nav + mobile drawer) ---------- */
 
@@ -161,10 +168,10 @@ function MegaMenu({ menu }) {
               <h6 className="mb-2 px-2 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-ink-500">
                 {col.title}
               </h6>
-              {col.items.map(([name, desc]) => (
-                <a
+              {col.items.map(([name, desc, path]) => (
+                <Link
                   key={name}
-                  href="#"
+                  to={path}
                   className="group flex items-baseline gap-3 rounded-sm px-2 py-1.5 no-underline transition-colors hover:bg-canvas"
                 >
                   <span className="text-[13px] font-medium text-ink-900 group-hover:text-crimson-300">
@@ -173,7 +180,7 @@ function MegaMenu({ menu }) {
                   <span className="ml-auto text-[11px] text-ink-500 group-hover:text-ink-700">
                     {desc}
                   </span>
-                </a>
+                </Link>
               ))}
             </div>
           ))}
@@ -326,10 +333,10 @@ function MobileSection({ id, expanded, setExpanded, onClose }) {
                   {col.title}
                 </h6>
                 <ul className="m-0 list-none space-y-2.5 p-0">
-                  {menu.columns.find(c => c.title === col.title).items.map(([name, desc]) => (
+                  {menu.columns.find(c => c.title === col.title).items.map(([name, desc, path]) => (
                     <li key={name}>
-                      <a
-                        href="#"
+                      <Link
+                        to={path}
                         onClick={onClose}
                         className="block no-underline"
                       >
@@ -337,7 +344,7 @@ function MobileSection({ id, expanded, setExpanded, onClose }) {
                           {name}
                         </span>
                         <span className="block text-[11px] text-ink-500">{desc}</span>
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
