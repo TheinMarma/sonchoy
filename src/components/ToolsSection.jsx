@@ -69,8 +69,8 @@ const TOOLS = [
   { group: 'documents', cat: 'business', name: 'Purchase Order Generator',  desc: 'Send vendors POs that match your accounting system numbering.', Icon: POIcon, path: '/tools/purchase-order-generator' },
   { group: 'documents', cat: 'business', name: 'Delivery Note Generator',   desc: 'Pack-list PDFs that ship alongside goods — no pricing visible.', Icon: DeliveryIcon, path: '/tools/delivery-note-generator' },
   { group: 'documents', cat: 'business', name: 'Expense Report Generator',  desc: 'Roll up receipts into a categorised, manager-ready expense report.', Icon: ExpenseIcon, path: '/tools/expense-report-generator' },
-  { group: 'documents', cat: 'business', name: 'Salary Slip Generator',     desc: 'Compliant payslips with deductions, taxes, and YTD totals.', Icon: PayslipIcon },
-  { group: 'documents', cat: 'business', name: 'Financial Report Generator', desc: 'Branded monthly or quarterly reports with charts and commentary.', Icon: ReportIcon },
+  { group: 'documents', cat: 'business', name: 'Salary Slip Generator',     desc: 'Compliant payslips with deductions, taxes, and YTD totals.', Icon: PayslipIcon, path: '/tools/salary-slip-generator' },
+  { group: 'documents', cat: 'business', name: 'Financial Report Generator', desc: 'Branded monthly or quarterly reports with charts and commentary.', Icon: ReportIcon, path: '/tools/financial-report-generator' },
 
   // Accounting Helpers
   { group: 'accounting', cat: 'business', name: 'Profit & Loss Statement',         desc: 'P&L from a CSV or trial balance — exported as a presentation-ready PDF.', Icon: PnlIcon, featured: true, path: '/tools/profit-loss-statement' },

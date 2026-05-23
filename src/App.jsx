@@ -57,6 +57,8 @@ const ReceiptGeneratorPage         = lazy(() => import('./pages/ReceiptGenerator
 const PurchaseOrderGeneratorPage   = lazy(() => import('./pages/PurchaseOrderGeneratorPage'))
 const DeliveryNoteGeneratorPage    = lazy(() => import('./pages/DeliveryNoteGeneratorPage'))
 const ExpenseReportGeneratorPage   = lazy(() => import('./pages/ExpenseReportGeneratorPage'))
+const SalarySlipGeneratorPage      = lazy(() => import('./pages/SalarySlipGeneratorPage'))
+const FinancialReportGeneratorPage = lazy(() => import('./pages/FinancialReportGeneratorPage'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
 function ToolPageFallback() {
@@ -274,6 +276,14 @@ export default function App() {
           <Route
             path="/tools/expense-report-generator"
             element={<ExpenseReportGeneratorPage />}
+          />
+          <Route
+            path="/tools/salary-slip-generator"
+            element={<SalarySlipGeneratorPage />}
+          />
+          <Route
+            path="/tools/financial-report-generator"
+            element={<FinancialReportGeneratorPage />}
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
