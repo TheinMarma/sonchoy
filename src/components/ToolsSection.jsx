@@ -66,9 +66,9 @@ const TOOLS = [
   // Business Documents
   { group: 'documents', cat: 'business', name: 'Quotation Generator',       desc: 'Itemised quotes with totals, tax, validity, and one-click conversion to invoice.', Icon: QuoteIcon, featured: true, path: '/tools/quotation-generator' },
   { group: 'documents', cat: 'business', name: 'Receipt Generator',         desc: 'Issue clean payment receipts the moment a client clears an invoice.', Icon: ReceiptIcon, path: '/tools/receipt-generator' },
-  { group: 'documents', cat: 'business', name: 'Purchase Order Generator',  desc: 'Send vendors POs that match your accounting system numbering.', Icon: POIcon },
-  { group: 'documents', cat: 'business', name: 'Delivery Note Generator',   desc: 'Pack-list PDFs that ship alongside goods — no pricing visible.', Icon: DeliveryIcon },
-  { group: 'documents', cat: 'business', name: 'Expense Report Generator',  desc: 'Roll up receipts into a categorised, manager-ready expense report.', Icon: ExpenseIcon },
+  { group: 'documents', cat: 'business', name: 'Purchase Order Generator',  desc: 'Send vendors POs that match your accounting system numbering.', Icon: POIcon, path: '/tools/purchase-order-generator' },
+  { group: 'documents', cat: 'business', name: 'Delivery Note Generator',   desc: 'Pack-list PDFs that ship alongside goods — no pricing visible.', Icon: DeliveryIcon, path: '/tools/delivery-note-generator' },
+  { group: 'documents', cat: 'business', name: 'Expense Report Generator',  desc: 'Roll up receipts into a categorised, manager-ready expense report.', Icon: ExpenseIcon, path: '/tools/expense-report-generator' },
   { group: 'documents', cat: 'business', name: 'Salary Slip Generator',     desc: 'Compliant payslips with deductions, taxes, and YTD totals.', Icon: PayslipIcon },
   { group: 'documents', cat: 'business', name: 'Financial Report Generator', desc: 'Branded monthly or quarterly reports with charts and commentary.', Icon: ReportIcon },
 

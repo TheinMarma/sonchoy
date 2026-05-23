@@ -54,6 +54,10 @@ const BudgetPlanningPage           = lazy(() => import('./pages/BudgetPlanningPa
 const FinancialForecastPage        = lazy(() => import('./pages/FinancialForecastPage'))
 const QuotationGeneratorPage       = lazy(() => import('./pages/QuotationGeneratorPage'))
 const ReceiptGeneratorPage         = lazy(() => import('./pages/ReceiptGeneratorPage'))
+const PurchaseOrderGeneratorPage   = lazy(() => import('./pages/PurchaseOrderGeneratorPage'))
+const DeliveryNoteGeneratorPage    = lazy(() => import('./pages/DeliveryNoteGeneratorPage'))
+const ExpenseReportGeneratorPage   = lazy(() => import('./pages/ExpenseReportGeneratorPage'))
+const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
 function ToolPageFallback() {
   return (
@@ -259,6 +263,19 @@ export default function App() {
             path="/tools/receipt-generator"
             element={<ReceiptGeneratorPage />}
           />
+          <Route
+            path="/tools/purchase-order-generator"
+            element={<PurchaseOrderGeneratorPage />}
+          />
+          <Route
+            path="/tools/delivery-note-generator"
+            element={<DeliveryNoteGeneratorPage />}
+          />
+          <Route
+            path="/tools/expense-report-generator"
+            element={<ExpenseReportGeneratorPage />}
+          />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
       <Footer />
