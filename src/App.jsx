@@ -66,6 +66,13 @@ const InvoiceTemplateBuilderPage   = lazy(() => import('./pages/InvoiceTemplateB
 const InvoicePdfExporterPage       = lazy(() => import('./pages/InvoicePdfExporterPage'))
 const MergeFinancialPdfsPage       = lazy(() => import('./pages/MergeFinancialPdfsPage'))
 const SplitPdfStatementsPage       = lazy(() => import('./pages/SplitPdfStatementsPage'))
+const CompressInvoicePdfsPage      = lazy(() => import('./pages/CompressInvoicePdfsPage'))
+const ReorderPdfPagesPage          = lazy(() => import('./pages/ReorderPdfPagesPage'))
+const AddWatermarkToInvoicePage    = lazy(() => import('./pages/AddWatermarkToInvoicePage'))
+const PasswordProtectFinancialPdfsPage = lazy(() => import('./pages/PasswordProtectFinancialPdfsPage'))
+const UnlockPdfStatementsPage      = lazy(() => import('./pages/UnlockPdfStatementsPage'))
+const AddSignatureToPdfPage        = lazy(() => import('./pages/AddSignatureToPdfPage'))
+const RotateScannedDocumentsPage   = lazy(() => import('./pages/RotateScannedDocumentsPage'))
 const GetStartedRedirect           = lazy(() => import('./pages/GetStartedRedirect'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
@@ -320,6 +327,34 @@ export default function App() {
           <Route
             path="/tools/split-pdf-statements"
             element={<SplitPdfStatementsPage />}
+          />
+          <Route
+            path="/tools/compress-invoice-pdfs"
+            element={<CompressInvoicePdfsPage />}
+          />
+          <Route
+            path="/tools/reorder-pdf-pages"
+            element={<ReorderPdfPagesPage />}
+          />
+          <Route
+            path="/tools/add-watermark-to-invoice"
+            element={<AddWatermarkToInvoicePage />}
+          />
+          <Route
+            path="/tools/password-protect-financial-pdfs"
+            element={<PasswordProtectFinancialPdfsPage />}
+          />
+          <Route
+            path="/tools/unlock-pdf-statements"
+            element={<UnlockPdfStatementsPage />}
+          />
+          <Route
+            path="/tools/add-signature-to-pdf"
+            element={<AddSignatureToPdfPage />}
+          />
+          <Route
+            path="/tools/rotate-scanned-documents"
+            element={<RotateScannedDocumentsPage />}
           />
           <Route path="/get-started" element={<GetStartedRedirect />} />
           <Route path="*" element={<NotFoundPage />} />

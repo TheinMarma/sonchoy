@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowRight, Check, Upload, Plus,
@@ -106,81 +106,125 @@ async function processPdf(file) {
 
 /* ---------- 1) Tool hero ---------- */
 
-function ToolHero({ uploader }) {
+/* Wraps the existing Uploader in a Sonchoy-standard launch modal — same
+   visual shell as every other tool page (bg-black/90 + backdrop-blur,
+   Esc to close, click-outside dismisses). */
+function LiveDemoModal({ open, onClose, children }) {
+  useEffect(() => {
+    if (!open) return
+    const original = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = original }
+  }, [open])
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, onClose])
+  if (!open) return null
   return (
-    <header className="relative overflow-hidden">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-48 -right-48 h-[640px] w-[640px] rounded-full opacity-40 blur-3xl"
-        style={{ background: 'radial-gradient(circle, var(--color-crimson-500) 0%, transparent 60%)' }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-48 -left-48 h-[480px] w-[480px] rounded-full opacity-25 blur-3xl"
-        style={{ background: 'radial-gradient(circle, var(--color-convert) 0%, transparent 60%)' }}
-      />
+    <div role="dialog" aria-modal="true" aria-label="Invoice PDF Extractor"
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/90 px-4 py-8 backdrop-blur-md md:px-8 md:py-12">
+      <div onClick={(e) => e.stopPropagation()} className="relative my-auto w-full max-w-[640px]">
+        {children}
+      </div>
+    </div>
+  )
+}
 
-      <div className="relative mx-auto max-w-[1240px] px-6 pb-16 pt-12 md:pt-16">
-        <nav aria-label="Breadcrumb" className="mb-10 flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-500">
-          <Link to="/" className="text-ink-700 no-underline hover:text-ink-950">Home</Link>
-          <span className="text-ink-400">/</span>
-          <Link to="/#tools" className="text-ink-700 no-underline hover:text-ink-950">Tools</Link>
-          <span className="text-ink-400">/</span>
-          <span className="text-convert">Convert</span>
-          <span className="text-ink-400">/</span>
-          <span className="text-ink-950">Invoice PDF to Excel</span>
-        </nav>
+const HERO_STATS = [
+  ['95–99%', 'Line-item accuracy'],
+  ['Multi',  'GST · VAT · sales tax'],
+  ['Local',  '100% in browser'],
+  ['Free',   '25 MB free tier'],
+]
 
-        <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-[1.05fr_1fr] md:gap-16">
-          <div>
-            <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-convert/30 bg-convert-bg px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-convert">
-              <span className="h-1.5 w-1.5 rounded-full bg-convert" />
-              Convert · Document extraction
-            </div>
+function ToolHero({ uploader }) {
+  const [open, setOpen] = useState(false)
+  /* Auto-close the modal when the upload succeeds — the user is then
+     scrolled to the preview section by the page-level handler. */
+  useEffect(() => {
+    if (uploader?.status === 'success') setOpen(false)
+  }, [uploader?.status])
 
-            <h1 className="mb-5 text-4xl font-medium leading-[1.04] tracking-[-0.03em] text-ink-950 md:text-[56px] md:leading-[1.02]">
-              Invoice PDF{' '}
-              <em className="font-serif font-normal italic text-crimson-300">to Excel,</em>
-              {' '}in seconds.
-            </h1>
+  return (
+    <>
+      <header className="relative overflow-hidden">
+        <div aria-hidden className="pointer-events-none absolute -top-48 -right-48 h-[720px] w-[720px] rounded-full opacity-50 blur-3xl"
+          style={{ background: 'radial-gradient(circle, var(--color-crimson-500) 0%, transparent 60%)' }} />
+        <div aria-hidden className="pointer-events-none absolute -bottom-64 -left-48 h-[600px] w-[600px] rounded-full opacity-25 blur-3xl"
+          style={{ background: 'radial-gradient(circle, var(--color-convert) 0%, transparent 60%)' }} />
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage: 'linear-gradient(to right, #FFFFFF 1px, transparent 1px), linear-gradient(to bottom, #FFFFFF 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
 
-            <p className="mb-8 max-w-[560px] text-lg leading-[1.55] text-ink-600">
-              Drop in any invoice PDF and pull every line item, vendor field, tax row, and total out into a clean .xlsx workbook — formatted, totalled, and ready to drop into your accounting software.
-            </p>
+        <div className="relative mx-auto max-w-[1240px] px-6 py-20 md:py-28">
+          <nav aria-label="Breadcrumb" className="mb-10 flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-500">
+            <Link to="/" className="text-ink-700 no-underline hover:text-ink-950">Home</Link>
+            <span className="text-ink-400">/</span>
+            <Link to="/#tools" className="text-ink-700 no-underline hover:text-ink-950">Tools</Link>
+            <span className="text-ink-400">/</span>
+            <span className="text-convert">Convert</span>
+            <span className="text-ink-400">/</span>
+            <span className="text-ink-950">Invoice PDF to Excel</span>
+          </nav>
 
-            <ul className="m-0 mb-8 grid list-none grid-cols-1 gap-2 p-0 sm:grid-cols-2">
-              {[
-                'Auto-detects line items & totals',
-                'Preserves tax columns (GST / VAT / Sales)',
-                'Multi-currency aware',
-                'Vendor & buyer fields extracted',
-                'Confidence score per row',
-                'Exports to .xlsx and .csv',
-              ].map((f) => (
-                <li key={f} className="flex items-start gap-2 text-[14px] text-ink-700">
-                  <Check size={14} className="mt-0.5 shrink-0 text-crimson-400" />
-                  {f}
-                </li>
-              ))}
-            </ul>
+          <span className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-convert/30 bg-convert-bg px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-convert">
+            <span className="h-1.5 w-1.5 rounded-full bg-convert shadow-[0_0_0_4px_rgba(96,165,250,0.25)]" />
+            Convert · Document extraction
+          </span>
 
-            <div className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ink-500">
-              <span className="inline-flex items-center gap-1.5">
-                <Check size={12} className="text-crimson-400" /> Runs entirely in your browser
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Check size={12} className="text-crimson-400" /> File never leaves your device
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <Check size={12} className="text-crimson-400" /> No signup
-              </span>
-            </div>
+          <h1 className="mb-7 max-w-[1000px] font-medium text-[44px] leading-[1.02] tracking-[-0.035em] text-ink-950 md:text-[80px] md:leading-[0.98]">
+            Invoice PDF{' '}
+            <em className="font-serif font-normal italic tracking-[-0.015em] text-crimson-300">
+              to Excel,
+            </em>
+            <br />
+            in{' '}
+            <em className="font-serif font-normal italic tracking-[-0.015em] text-crimson-300">
+              seconds.
+            </em>
+          </h1>
+
+          <p className="mb-10 max-w-[640px] text-xl leading-[1.55] text-ink-700">
+            Drop in any invoice PDF and pull every line item, vendor field, tax row, and total out into a clean .xlsx workbook — formatted, totalled, and ready to drop into your accounting software.
+          </p>
+
+          <div className="mb-12 flex flex-wrap items-center gap-3">
+            <button type="button" onClick={() => setOpen(true)} className="btn btn-cta btn-xl">
+              Launch The Tool <ArrowRight size={16} />
+            </button>
+            <Link to="/#tools" className="inline-flex items-center justify-center gap-2 rounded-lg border border-ink-950/15 bg-ink-950/5 px-7 py-[18px] text-[16px] font-medium leading-none text-ink-950 no-underline backdrop-blur-sm transition-colors hover:bg-ink-950/10 capitalize">
+              Explore More Tools
+            </Link>
           </div>
 
-          <Uploader {...uploader} />
+          <div className="mb-12 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-ink-600">
+            <span className="inline-flex items-center gap-1.5"><Check className="text-crimson-400" /> No signup, ever</span>
+            <span className="inline-flex items-center gap-1.5"><Check className="text-crimson-400" /> 100% local · nothing uploaded</span>
+            <span className="inline-flex items-center gap-1.5"><Check className="text-crimson-400" /> Confidence score per row</span>
+            <span className="inline-flex items-center gap-1.5"><Check className="text-crimson-400" /> Esc to close</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
+            {HERO_STATS.map(([num, lab]) => (
+              <div key={lab} className="bg-paper p-5">
+                <div className="mb-1 font-medium text-[28px] leading-none tracking-[-0.025em] text-ink-950">{num}</div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-500">{lab}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      <LiveDemoModal open={open} onClose={() => setOpen(false)}>
+        <Uploader {...uploader} />
+      </LiveDemoModal>
+    </>
   )
 }
 

@@ -45,13 +45,13 @@ export const TOOLS = [
   // Core PDF Utilities
   { group: 'pdf', cat: 'edit', name: 'Merge Financial PDFs',         desc: 'Combine invoices, statements, and reports into a single packet.', Icon: MergeIcon, featured: true, path: '/tools/merge-financial-pdfs' },
   { group: 'pdf', cat: 'edit', name: 'Split PDF Statements',         desc: 'Break long statements into per-month, per-account, or per-page files.', Icon: SplitIcon, path: '/tools/split-pdf-statements' },
-  { group: 'pdf', cat: 'edit', name: 'Compress Invoice PDFs',        desc: 'Shrink invoice attachments by 60–80% — email & archive friendly.', Icon: CompressIcon, featured: true },
-  { group: 'pdf', cat: 'edit', name: 'Reorder PDF Pages',            desc: 'Drag pages into the right sequence before sending to clients.', Icon: ReorderIcon },
-  { group: 'pdf', cat: 'edit', name: 'Add Watermark to Invoice',     desc: 'Stamp DRAFT, PAID, or your logo across every page in one click.', Icon: WatermarkIcon },
-  { group: 'pdf', cat: 'edit', name: 'Password Protect Financial PDFs', desc: 'AES-256 encrypt sensitive ledgers, payslips, and reports.', Icon: LockIcon },
-  { group: 'pdf', cat: 'edit', name: 'Unlock PDF Statements',        desc: 'Strip the password off a statement you own so you can extract data.', Icon: UnlockIcon },
-  { group: 'pdf', cat: 'edit', name: 'Add Signature to PDF',         desc: 'Drop a typed, drawn, or uploaded signature onto contracts and quotes.', Icon: SignatureIcon, featured: true },
-  { group: 'pdf', cat: 'edit', name: 'Rotate Scanned Documents',     desc: 'Auto-fix sideways or upside-down scans across every page at once.', Icon: RotateIcon },
+  { group: 'pdf', cat: 'edit', name: 'Compress Invoice PDFs',        desc: 'Shrink invoice attachments by 60–80% — email & archive friendly.', Icon: CompressIcon, featured: true, path: '/tools/compress-invoice-pdfs' },
+  { group: 'pdf', cat: 'edit', name: 'Reorder PDF Pages',            desc: 'Drag pages into the right sequence before sending to clients.', Icon: ReorderIcon, path: '/tools/reorder-pdf-pages' },
+  { group: 'pdf', cat: 'edit', name: 'Add Watermark to Invoice',     desc: 'Stamp DRAFT, PAID, or your logo across every page in one click.', Icon: WatermarkIcon, path: '/tools/add-watermark-to-invoice' },
+  { group: 'pdf', cat: 'edit', name: 'Password Protect Financial PDFs', desc: 'AES-256 encrypt sensitive ledgers, payslips, and reports.', Icon: LockIcon, path: '/tools/password-protect-financial-pdfs' },
+  { group: 'pdf', cat: 'edit', name: 'Unlock PDF Statements',        desc: 'Strip the password off a statement you own so you can extract data.', Icon: UnlockIcon, path: '/tools/unlock-pdf-statements' },
+  { group: 'pdf', cat: 'edit', name: 'Add Signature to PDF',         desc: 'Drop a typed, drawn, or uploaded signature onto contracts and quotes.', Icon: SignatureIcon, featured: true, path: '/tools/add-signature-to-pdf' },
+  { group: 'pdf', cat: 'edit', name: 'Rotate Scanned Documents',     desc: 'Auto-fix sideways or upside-down scans across every page at once.', Icon: RotateIcon, path: '/tools/rotate-scanned-documents' },
 
   // Invoice Tools
   { group: 'invoicing', cat: 'business', name: 'Invoice Generator',         desc: 'Build branded invoices in seconds — line items, tax, totals, and pay link.', Icon: InvoiceIcon, featured: true, path: '/tools/invoice-generator' },
