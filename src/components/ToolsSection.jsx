@@ -16,7 +16,10 @@ import { Caret, SearchIcon,
    conversion (convert / blue) · pdf (edit / violet) ·
    invoicing, documents, accounting, tax, contracts (business / teal) */
 
-const TOOLS = [
+/* Exported so other modules (e.g. /get-started redirect) can derive the live
+   list of tool pages without re-declaring it. Any tile here with a `path`
+   property is a live, routed page. */
+export const TOOLS = [
   // Document Conversion
   { group: 'conversion', cat: 'convert', name: 'Invoice PDF to Excel',              desc: 'Pull line items, totals, and tax from invoice PDFs into clean spreadsheet rows.', Icon: InvoicePdfIcon, featured: true, path: '/tools/invoice-pdf-to-excel' },
   { group: 'conversion', cat: 'convert', name: 'Bank Statement PDF to Excel',       desc: 'Turn statement PDFs into reconciled transaction tables — dates, amounts, balances.', Icon: BankStatementIcon, featured: true, path: '/tools/bank-statement-pdf-to-excel' },

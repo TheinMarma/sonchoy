@@ -59,6 +59,7 @@ const DeliveryNoteGeneratorPage    = lazy(() => import('./pages/DeliveryNoteGene
 const ExpenseReportGeneratorPage   = lazy(() => import('./pages/ExpenseReportGeneratorPage'))
 const SalarySlipGeneratorPage      = lazy(() => import('./pages/SalarySlipGeneratorPage'))
 const FinancialReportGeneratorPage = lazy(() => import('./pages/FinancialReportGeneratorPage'))
+const GetStartedRedirect           = lazy(() => import('./pages/GetStartedRedirect'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
 function ToolPageFallback() {
@@ -285,6 +286,7 @@ export default function App() {
             path="/tools/financial-report-generator"
             element={<FinancialReportGeneratorPage />}
           />
+          <Route path="/get-started" element={<GetStartedRedirect />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
