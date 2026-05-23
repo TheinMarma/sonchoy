@@ -59,6 +59,13 @@ const DeliveryNoteGeneratorPage    = lazy(() => import('./pages/DeliveryNoteGene
 const ExpenseReportGeneratorPage   = lazy(() => import('./pages/ExpenseReportGeneratorPage'))
 const SalarySlipGeneratorPage      = lazy(() => import('./pages/SalarySlipGeneratorPage'))
 const FinancialReportGeneratorPage = lazy(() => import('./pages/FinancialReportGeneratorPage'))
+const FreelanceInvoiceGeneratorPage = lazy(() => import('./pages/FreelanceInvoiceGeneratorPage'))
+const RecurringInvoiceGeneratorPage = lazy(() => import('./pages/RecurringInvoiceGeneratorPage'))
+const InvoiceNumberGeneratorPage   = lazy(() => import('./pages/InvoiceNumberGeneratorPage'))
+const InvoiceTemplateBuilderPage   = lazy(() => import('./pages/InvoiceTemplateBuilderPage'))
+const InvoicePdfExporterPage       = lazy(() => import('./pages/InvoicePdfExporterPage'))
+const MergeFinancialPdfsPage       = lazy(() => import('./pages/MergeFinancialPdfsPage'))
+const SplitPdfStatementsPage       = lazy(() => import('./pages/SplitPdfStatementsPage'))
 const GetStartedRedirect           = lazy(() => import('./pages/GetStartedRedirect'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
@@ -285,6 +292,34 @@ export default function App() {
           <Route
             path="/tools/financial-report-generator"
             element={<FinancialReportGeneratorPage />}
+          />
+          <Route
+            path="/tools/freelance-invoice-generator"
+            element={<FreelanceInvoiceGeneratorPage />}
+          />
+          <Route
+            path="/tools/recurring-invoice-generator"
+            element={<RecurringInvoiceGeneratorPage />}
+          />
+          <Route
+            path="/tools/invoice-number-generator"
+            element={<InvoiceNumberGeneratorPage />}
+          />
+          <Route
+            path="/tools/invoice-template-builder"
+            element={<InvoiceTemplateBuilderPage />}
+          />
+          <Route
+            path="/tools/invoice-pdf-exporter"
+            element={<InvoicePdfExporterPage />}
+          />
+          <Route
+            path="/tools/merge-financial-pdfs"
+            element={<MergeFinancialPdfsPage />}
+          />
+          <Route
+            path="/tools/split-pdf-statements"
+            element={<SplitPdfStatementsPage />}
           />
           <Route path="/get-started" element={<GetStartedRedirect />} />
           <Route path="*" element={<NotFoundPage />} />

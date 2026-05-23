@@ -43,8 +43,8 @@ export const TOOLS = [
   { group: 'conversion', cat: 'convert', name: 'PDF Table Extractor',               desc: 'Pull every table out of a PDF with column types and headers preserved.', Icon: TableIcon },
 
   // Core PDF Utilities
-  { group: 'pdf', cat: 'edit', name: 'Merge Financial PDFs',         desc: 'Combine invoices, statements, and reports into a single packet.', Icon: MergeIcon, featured: true },
-  { group: 'pdf', cat: 'edit', name: 'Split PDF Statements',         desc: 'Break long statements into per-month, per-account, or per-page files.', Icon: SplitIcon },
+  { group: 'pdf', cat: 'edit', name: 'Merge Financial PDFs',         desc: 'Combine invoices, statements, and reports into a single packet.', Icon: MergeIcon, featured: true, path: '/tools/merge-financial-pdfs' },
+  { group: 'pdf', cat: 'edit', name: 'Split PDF Statements',         desc: 'Break long statements into per-month, per-account, or per-page files.', Icon: SplitIcon, path: '/tools/split-pdf-statements' },
   { group: 'pdf', cat: 'edit', name: 'Compress Invoice PDFs',        desc: 'Shrink invoice attachments by 60–80% — email & archive friendly.', Icon: CompressIcon, featured: true },
   { group: 'pdf', cat: 'edit', name: 'Reorder PDF Pages',            desc: 'Drag pages into the right sequence before sending to clients.', Icon: ReorderIcon },
   { group: 'pdf', cat: 'edit', name: 'Add Watermark to Invoice',     desc: 'Stamp DRAFT, PAID, or your logo across every page in one click.', Icon: WatermarkIcon },
@@ -58,13 +58,13 @@ export const TOOLS = [
   { group: 'invoicing', cat: 'business', name: 'Tax Invoice Generator',     desc: 'Region-aware tax invoices with HSN/SAC, tax breakdowns, and signatures.', Icon: TaxInvoiceIcon, path: '/tools/tax-invoice-generator' },
   { group: 'invoicing', cat: 'business', name: 'Proforma Invoice Generator', desc: 'Send a proforma quote that converts to a final invoice in one click.', Icon: InvoiceIcon, path: '/tools/proforma-invoice-generator' },
   { group: 'invoicing', cat: 'business', name: 'GST/VAT Invoice Generator', desc: 'Compliant GST or VAT invoices with multi-rate tax and reverse charge.', Icon: VatIcon, featured: true, path: '/tools/gst-vat-invoice-generator' },
-  { group: 'invoicing', cat: 'business', name: 'Freelance Invoice Generator', desc: 'Hours, day rates, retainers — invoices designed for solo operators.', Icon: InvoiceIcon },
-  { group: 'invoicing', cat: 'business', name: 'Recurring Invoice Generator', desc: 'Set a cadence; we draft the next invoice automatically each cycle.', Icon: RecurringIcon },
+  { group: 'invoicing', cat: 'business', name: 'Freelance Invoice Generator', desc: 'Hours, day rates, retainers — invoices designed for solo operators.', Icon: InvoiceIcon, path: '/tools/freelance-invoice-generator' },
+  { group: 'invoicing', cat: 'business', name: 'Recurring Invoice Generator', desc: 'Set a cadence; we draft the next invoice automatically each cycle.', Icon: RecurringIcon, path: '/tools/recurring-invoice-generator' },
 
   // Billing Utilities
-  { group: 'invoicing', cat: 'business', name: 'Invoice Number Generator',  desc: 'Sequential, prefixed, or fiscal-year invoice numbers — never duplicate again.', Icon: HashIcon },
-  { group: 'invoicing', cat: 'business', name: 'Invoice Template Builder',  desc: 'Design a branded template once, reuse forever across all generators.', Icon: TemplateIcon },
-  { group: 'invoicing', cat: 'business', name: 'Invoice PDF Exporter',      desc: 'Bulk-export draft invoices to print-ready, archivable PDFs.', Icon: ExportIcon },
+  { group: 'invoicing', cat: 'business', name: 'Invoice Number Generator',  desc: 'Sequential, prefixed, or fiscal-year invoice numbers — never duplicate again.', Icon: HashIcon, path: '/tools/invoice-number-generator' },
+  { group: 'invoicing', cat: 'business', name: 'Invoice Template Builder',  desc: 'Design a branded template once, reuse forever across all generators.', Icon: TemplateIcon, path: '/tools/invoice-template-builder' },
+  { group: 'invoicing', cat: 'business', name: 'Invoice PDF Exporter',      desc: 'Bulk-export draft invoices to print-ready, archivable PDFs.', Icon: ExportIcon, path: '/tools/invoice-pdf-exporter' },
 
   // Business Documents
   { group: 'documents', cat: 'business', name: 'Quotation Generator',       desc: 'Itemised quotes with totals, tax, validity, and one-click conversion to invoice.', Icon: QuoteIcon, featured: true, path: '/tools/quotation-generator' },
