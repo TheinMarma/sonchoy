@@ -1,0 +1,71 @@
+# ---------------------------------------------------------------------
+#  Sonchoy — Apache (Hostinger) config
+#  Single-page-app routing + sensible caching + compression.
+# ---------------------------------------------------------------------
+
+# --- SPA fallback ----------------------------------------------------
+# Any URL that doesn't map to a real file or directory should serve
+# index.html, so React Router can resolve it (incl. the 404 route).
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Force HTTPS (uncomment if Hostinger isn't already doing this)
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # If the request is for an existing file or directory, serve it as-is
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Otherwise hand off to React (index.html). The SPA shows the 404 page
+  # client-side via the catch-all <Route path="*"> in App.jsx.
+  RewriteRule ^ /index.html [L]
+</IfModule>
+
+# --- Caching ---------------------------------------------------------
+# Vite emits hashed asset filenames, so hashed files can be cached
+# aggressively. index.html must NOT be cached or new deploys won't ship.
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML — never cache, always revalidate
+  ExpiresByType text/html                 "access plus 0 seconds"
+
+  # Hashed JS / CSS / fonts / images — long cache
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType text/javascript           "access plus 1 year"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 year"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/x-icon              "access plus 1 year"
+  ExpiresByType font/woff                 "access plus 1 year"
+  ExpiresByType font/woff2                "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Belt-and-braces: stop intermediate caches from serving stale index.html
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+
+  # Basic hardening
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# --- Compression -----------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml font/woff font/woff2
+</IfModule>
+
+# --- 404 fallback (only fires if mod_rewrite is unavailable) ---------
+ErrorDocument 404 /index.html
