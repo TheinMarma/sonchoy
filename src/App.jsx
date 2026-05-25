@@ -73,6 +73,16 @@ const PasswordProtectFinancialPdfsPage = lazy(() => import('./pages/PasswordProt
 const UnlockPdfStatementsPage      = lazy(() => import('./pages/UnlockPdfStatementsPage'))
 const AddSignatureToPdfPage        = lazy(() => import('./pages/AddSignatureToPdfPage'))
 const RotateScannedDocumentsPage   = lazy(() => import('./pages/RotateScannedDocumentsPage'))
+const ReceiptImageToPdfPage        = lazy(() => import('./pages/ReceiptImageToPdfPage'))
+const PdfToCsvPage                 = lazy(() => import('./pages/PdfToCsvPage'))
+const ExcelToPdfPage               = lazy(() => import('./pages/ExcelToPdfPage'))
+const PdfToExcelPage               = lazy(() => import('./pages/PdfToExcelPage'))
+const JpgReceiptToPdfPage          = lazy(() => import('./pages/JpgReceiptToPdfPage'))
+const ScanToPdfPage                = lazy(() => import('./pages/ScanToPdfPage'))
+const PdfToXlsxConverterPage       = lazy(() => import('./pages/PdfToXlsxConverterPage'))
+const CsvToPdfConverterPage        = lazy(() => import('./pages/CsvToPdfConverterPage'))
+const FinancialReportPdfToExcelPage = lazy(() => import('./pages/FinancialReportPdfToExcelPage'))
+const OcrReceiptToTextPage         = lazy(() => import('./pages/OcrReceiptToTextPage'))
 const GetStartedRedirect           = lazy(() => import('./pages/GetStartedRedirect'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
@@ -355,6 +365,46 @@ export default function App() {
           <Route
             path="/tools/rotate-scanned-documents"
             element={<RotateScannedDocumentsPage />}
+          />
+          <Route
+            path="/tools/receipt-image-to-pdf"
+            element={<ReceiptImageToPdfPage />}
+          />
+          <Route
+            path="/tools/pdf-to-csv"
+            element={<PdfToCsvPage />}
+          />
+          <Route
+            path="/tools/excel-to-pdf"
+            element={<ExcelToPdfPage />}
+          />
+          <Route
+            path="/tools/pdf-to-excel"
+            element={<PdfToExcelPage />}
+          />
+          <Route
+            path="/tools/jpg-receipt-to-pdf"
+            element={<JpgReceiptToPdfPage />}
+          />
+          <Route
+            path="/tools/scan-to-pdf"
+            element={<ScanToPdfPage />}
+          />
+          <Route
+            path="/tools/pdf-to-xlsx-converter"
+            element={<PdfToXlsxConverterPage />}
+          />
+          <Route
+            path="/tools/csv-to-pdf-converter"
+            element={<CsvToPdfConverterPage />}
+          />
+          <Route
+            path="/tools/financial-report-pdf-to-excel"
+            element={<FinancialReportPdfToExcelPage />}
+          />
+          <Route
+            path="/tools/ocr-receipt-to-text"
+            element={<OcrReceiptToTextPage />}
           />
           <Route path="/get-started" element={<GetStartedRedirect />} />
           <Route path="*" element={<NotFoundPage />} />
