@@ -78,11 +78,13 @@ const PdfToCsvPage                 = lazy(() => import('./pages/PdfToCsvPage'))
 const ExcelToPdfPage               = lazy(() => import('./pages/ExcelToPdfPage'))
 const PdfToExcelPage               = lazy(() => import('./pages/PdfToExcelPage'))
 const JpgReceiptToPdfPage          = lazy(() => import('./pages/JpgReceiptToPdfPage'))
+const PngReceiptToPdfPage          = lazy(() => import('./pages/PngReceiptToPdfPage'))
 const ScanToPdfPage                = lazy(() => import('./pages/ScanToPdfPage'))
 const PdfToXlsxConverterPage       = lazy(() => import('./pages/PdfToXlsxConverterPage'))
 const CsvToPdfConverterPage        = lazy(() => import('./pages/CsvToPdfConverterPage'))
 const FinancialReportPdfToExcelPage = lazy(() => import('./pages/FinancialReportPdfToExcelPage'))
 const OcrReceiptToTextPage         = lazy(() => import('./pages/OcrReceiptToTextPage'))
+const OcrInvoiceToExcelPage        = lazy(() => import('./pages/OcrInvoiceToExcelPage'))
 const GetStartedRedirect           = lazy(() => import('./pages/GetStartedRedirect'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
@@ -387,6 +389,10 @@ export default function App() {
             element={<JpgReceiptToPdfPage />}
           />
           <Route
+            path="/tools/png-receipt-to-pdf"
+            element={<PngReceiptToPdfPage />}
+          />
+          <Route
             path="/tools/scan-to-pdf"
             element={<ScanToPdfPage />}
           />
@@ -405,6 +411,10 @@ export default function App() {
           <Route
             path="/tools/ocr-receipt-to-text"
             element={<OcrReceiptToTextPage />}
+          />
+          <Route
+            path="/tools/ocr-invoice-to-excel"
+            element={<OcrInvoiceToExcelPage />}
           />
           <Route path="/get-started" element={<GetStartedRedirect />} />
           <Route path="*" element={<NotFoundPage />} />
