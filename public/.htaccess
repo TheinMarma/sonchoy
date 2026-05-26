@@ -49,6 +49,13 @@
 </IfModule>
 
 <IfModule mod_headers.c>
+  # Hashed Vite assets are immutable — keep them in browser cache for a year.
+  # This is the reliable way to set TTL (mod_expires isn't always enabled on
+  # shared hosts / behind Cloudflare). Lighthouse picks this up directly.
+  <FilesMatch "\.(?:js|mjs|css|woff2?|ttf|otf|eot|svg|png|jpe?g|gif|webp|avif|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
   # Belt-and-braces: stop intermediate caches from serving stale index.html
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
