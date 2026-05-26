@@ -35,12 +35,12 @@ export const TOOLS = [
   { group: 'conversion', cat: 'convert', name: 'OCR Receipt to Text',               desc: 'Read printed and handwritten receipts into searchable text and JSON.', Icon: OcrIcon, featured: true, path: '/tools/ocr-receipt-to-text' },
   { group: 'conversion', cat: 'convert', name: 'OCR Invoice to Excel',              desc: 'Optical character recognition for invoices — every field structured into Excel.', Icon: OcrIcon, path: '/tools/ocr-invoice-to-excel' },
   { group: 'conversion', cat: 'convert', name: 'PNG Receipt to PDF',                desc: 'High-quality PNG receipts compiled into archive-ready PDFs.', Icon: ImageToPdfIcon, path: '/tools/png-receipt-to-pdf' },
-  { group: 'conversion', cat: 'convert', name: 'Multi Receipt PDF Combiner',        desc: 'Combine dozens of receipt PDFs into one expense-report packet.', Icon: MergeIcon },
-  { group: 'conversion', cat: 'convert', name: 'Transaction History PDF to CSV',    desc: 'Statement transactions exported as clean CSV for accounting-software import.', Icon: CsvIcon },
-  { group: 'conversion', cat: 'convert', name: 'Scan Bank Statement to Excel',      desc: 'OCR + parse scanned bank statements into reconciled Excel rows.', Icon: ScanIcon },
-  { group: 'conversion', cat: 'convert', name: 'Image to Financial PDF Converter',  desc: 'Phone-camera shots of any financial document — uniform, archive-grade PDFs.', Icon: ImageToPdfIcon },
-  { group: 'conversion', cat: 'convert', name: 'Digital Signature Scan to PDF',     desc: 'Capture a wet signature, embed it cleanly into any PDF document.', Icon: SignatureIcon },
-  { group: 'conversion', cat: 'convert', name: 'PDF Table Extractor',               desc: 'Pull every table out of a PDF with column types and headers preserved.', Icon: TableIcon },
+  { group: 'conversion', cat: 'convert', name: 'Multi Receipt PDF Combiner',        desc: 'Combine dozens of receipt PDFs into one expense-report packet.', Icon: MergeIcon, path: '/tools/multi-receipt-pdf-combiner' },
+  { group: 'conversion', cat: 'convert', name: 'Transaction History PDF to CSV',    desc: 'Statement transactions exported as clean CSV for accounting-software import.', Icon: CsvIcon, path: '/tools/transaction-history-pdf-to-csv' },
+  { group: 'conversion', cat: 'convert', name: 'Scan Bank Statement to Excel',      desc: 'OCR + parse scanned bank statements into reconciled Excel rows.', Icon: ScanIcon, path: '/tools/scan-bank-statement-to-excel' },
+  { group: 'conversion', cat: 'convert', name: 'Image to Financial PDF Converter',  desc: 'Phone-camera shots of any financial document — uniform, archive-grade PDFs.', Icon: ImageToPdfIcon, path: '/tools/image-to-financial-pdf-converter' },
+  { group: 'conversion', cat: 'convert', name: 'Digital Signature Scan to PDF',     desc: 'Capture a wet signature, embed it cleanly into any PDF document.', Icon: SignatureIcon, path: '/tools/digital-signature-scan-to-pdf' },
+  { group: 'conversion', cat: 'convert', name: 'PDF Table Extractor',               desc: 'Pull every table out of a PDF with column types and headers preserved.', Icon: TableIcon, path: '/tools/pdf-table-extractor' },
 
   // Core PDF Utilities
   { group: 'pdf', cat: 'edit', name: 'Merge Financial PDFs',         desc: 'Combine invoices, statements, and reports into a single packet.', Icon: MergeIcon, featured: true, path: '/tools/merge-financial-pdfs' },
@@ -92,10 +92,10 @@ export const TOOLS = [
   { group: 'accounting', cat: 'business', name: 'Tax Summary Report',              desc: 'Tax collected, owed, and remitted across periods and regions.', Icon: PercentIcon, path: '/tools/tax-summary-report' },
   { group: 'accounting', cat: 'business', name: 'Budget Planning Sheet',           desc: 'Build budgets line-by-line with variance tracking columns.', Icon: TemplateIcon, path: '/tools/budget-planning-sheet' },
   { group: 'accounting', cat: 'business', name: 'Financial Forecast Generator',    desc: 'Project revenue and expenses forward with optimistic / base / downside columns.', Icon: ForecastIcon, path: '/tools/financial-forecast' },
-  { group: 'accounting', cat: 'business', name: 'Profit Margin Calculator',        desc: 'Gross, operating, and net margins on every revenue line — PDF-exported.', Icon: PercentIcon },
-  { group: 'accounting', cat: 'business', name: 'Break-Even Analysis',             desc: 'Find the units or revenue where fixed costs cross profit.', Icon: AmortIcon },
-  { group: 'accounting', cat: 'business', name: 'Annual Financial Report',         desc: 'Year-end report with charts, commentary, and signed cover page.', Icon: PnlIcon },
-  { group: 'accounting', cat: 'business', name: 'Inventory Valuation Report',      desc: 'Stock-on-hand valued at cost, retail, or moving average.', Icon: InventoryIcon },
+  { group: 'accounting', cat: 'business', name: 'Profit Margin Calculator',        desc: 'Gross, operating, and net margins on every revenue line — PDF-exported.', Icon: PercentIcon, path: '/tools/profit-margin-calculator' },
+  { group: 'accounting', cat: 'business', name: 'Break-Even Analysis',             desc: 'Find the units or revenue where fixed costs cross profit.', Icon: AmortIcon, path: '/tools/break-even-analysis' },
+  { group: 'accounting', cat: 'business', name: 'Annual Financial Report',         desc: 'Year-end report with charts, commentary, and signed cover page.', Icon: PnlIcon, path: '/tools/annual-financial-report' },
+  { group: 'accounting', cat: 'business', name: 'Inventory Valuation Report',      desc: 'Stock-on-hand valued at cost, retail, or moving average.', Icon: InventoryIcon, path: '/tools/inventory-valuation-report' },
 
   // Tax & Banking
   { group: 'tax', cat: 'business', name: 'Tax Calculation Sheet',                desc: 'Income, slabs, deductions — a clean working sheet for client filings.', Icon: PercentIcon, featured: true, path: '/tools/tax-calculation-sheet' },
@@ -114,10 +114,10 @@ export const TOOLS = [
   { group: 'tax', cat: 'business', name: 'Credit Card Payment Schedule',         desc: 'Plan minimum or accelerated card payoff with total interest paid.', Icon: CreditCardIcon, path: '/tools/credit-card-payment-schedule' },
   { group: 'tax', cat: 'business', name: 'Mortgage Payment PDF',                 desc: 'Full mortgage schedule — principal, interest, escrow, taxes, balance.', Icon: AmortIcon, path: '/tools/mortgage-payment' },
   { group: 'tax', cat: 'business', name: 'Savings Interest Report',              desc: 'Compound savings growth across years with deposit and withdrawal lines.', Icon: CoinStackIcon, path: '/tools/savings-interest-report' },
-  { group: 'tax', cat: 'business', name: 'Financial Year Tax Summary',           desc: 'A one-page year-end summary — income, deductions, tax paid, refunds.', Icon: ReportIcon },
-  { group: 'tax', cat: 'business', name: 'Banking Transaction Summary',          desc: 'Monthly inflows, outflows, and category breakdowns from any account.', Icon: BankStatementIcon },
-  { group: 'tax', cat: 'business', name: 'Debt Repayment Planner PDF',           desc: 'Snowball or avalanche payoff plans across multiple debts and rates.', Icon: AmortIcon },
-  { group: 'tax', cat: 'business', name: 'Investment Return Calculation Sheet',  desc: 'CAGR, IRR, and absolute return on any holding period.', Icon: ForecastIcon },
+  { group: 'tax', cat: 'business', name: 'Financial Year Tax Summary',           desc: 'A one-page year-end summary — income, deductions, tax paid, refunds.', Icon: ReportIcon, path: '/tools/financial-year-tax-summary' },
+  { group: 'tax', cat: 'business', name: 'Banking Transaction Summary',          desc: 'Monthly inflows, outflows, and category breakdowns from any account.', Icon: BankStatementIcon, path: '/tools/banking-transaction-summary' },
+  { group: 'tax', cat: 'business', name: 'Debt Repayment Planner PDF',           desc: 'Snowball or avalanche payoff plans across multiple debts and rates.', Icon: AmortIcon, path: '/tools/debt-repayment-planner-pdf' },
+  { group: 'tax', cat: 'business', name: 'Investment Return Calculation Sheet',  desc: 'CAGR, IRR, and absolute return on any holding period.', Icon: ForecastIcon, path: '/tools/investment-return-calculation-sheet' },
 
   // Small Business Utilities (Contracts & letters)
   { group: 'contracts', cat: 'business', name: 'Client Contract Generator',  desc: 'Engagement contracts with scope, rates, and term — lawyer-reviewed templates.', Icon: ContractIcon, path: '/tools/client-contract-generator' },

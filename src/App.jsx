@@ -34,12 +34,17 @@ const PaymentReminderLetterPage    = lazy(() => import('./pages/PaymentReminderL
 const LatePaymentNoticePage        = lazy(() => import('./pages/LatePaymentNoticePage'))
 const EmiSchedulePage              = lazy(() => import('./pages/EmiSchedulePage'))
 const LoanAmortizationPage         = lazy(() => import('./pages/LoanAmortizationPage'))
+const DebtRepaymentPlannerPdfPage  = lazy(() => import('./pages/DebtRepaymentPlannerPdfPage'))
 const GstCalculationSheetPage      = lazy(() => import('./pages/GstCalculationSheetPage'))
 const IncomeTaxEstimatorPage       = lazy(() => import('./pages/IncomeTaxEstimatorPage'))
 const SalesTaxReportPage           = lazy(() => import('./pages/SalesTaxReportPage'))
 const TaxDeductionSummaryPage      = lazy(() => import('./pages/TaxDeductionSummaryPage'))
 const BankStatementAnalyzerPage    = lazy(() => import('./pages/BankStatementAnalyzerPage'))
+const BankingTransactionSummaryPage = lazy(() => import('./pages/BankingTransactionSummaryPage'))
 const InterestCalcPage             = lazy(() => import('./pages/InterestCalcPage'))
+const InvestmentReturnCalculationSheetPage = lazy(() => import('./pages/InvestmentReturnCalculationSheetPage'))
+const ProfitMarginCalculatorPage   = lazy(() => import('./pages/ProfitMarginCalculatorPage'))
+const BreakEvenAnalysisPage        = lazy(() => import('./pages/BreakEvenAnalysisPage'))
 const MonthlyLoanPaymentPage       = lazy(() => import('./pages/MonthlyLoanPaymentPage'))
 const CreditCardPaymentSchedulePage = lazy(() => import('./pages/CreditCardPaymentSchedulePage'))
 const MortgagePaymentPage          = lazy(() => import('./pages/MortgagePaymentPage'))
@@ -50,6 +55,7 @@ const RevenueReportPage            = lazy(() => import('./pages/RevenueReportPag
 const BusinessExpenseBreakdownPage = lazy(() => import('./pages/BusinessExpenseBreakdownPage'))
 const PayrollSummaryPage           = lazy(() => import('./pages/PayrollSummaryPage'))
 const TaxSummaryReportPage         = lazy(() => import('./pages/TaxSummaryReportPage'))
+const FinancialYearTaxSummaryPage  = lazy(() => import('./pages/FinancialYearTaxSummaryPage'))
 const BudgetPlanningPage           = lazy(() => import('./pages/BudgetPlanningPage'))
 const FinancialForecastPage        = lazy(() => import('./pages/FinancialForecastPage'))
 const QuotationGeneratorPage       = lazy(() => import('./pages/QuotationGeneratorPage'))
@@ -59,12 +65,15 @@ const DeliveryNoteGeneratorPage    = lazy(() => import('./pages/DeliveryNoteGene
 const ExpenseReportGeneratorPage   = lazy(() => import('./pages/ExpenseReportGeneratorPage'))
 const SalarySlipGeneratorPage      = lazy(() => import('./pages/SalarySlipGeneratorPage'))
 const FinancialReportGeneratorPage = lazy(() => import('./pages/FinancialReportGeneratorPage'))
+const AnnualFinancialReportPage    = lazy(() => import('./pages/AnnualFinancialReportPage'))
+const InventoryValuationReportPage = lazy(() => import('./pages/InventoryValuationReportPage'))
 const FreelanceInvoiceGeneratorPage = lazy(() => import('./pages/FreelanceInvoiceGeneratorPage'))
 const RecurringInvoiceGeneratorPage = lazy(() => import('./pages/RecurringInvoiceGeneratorPage'))
 const InvoiceNumberGeneratorPage   = lazy(() => import('./pages/InvoiceNumberGeneratorPage'))
 const InvoiceTemplateBuilderPage   = lazy(() => import('./pages/InvoiceTemplateBuilderPage'))
 const InvoicePdfExporterPage       = lazy(() => import('./pages/InvoicePdfExporterPage'))
 const MergeFinancialPdfsPage       = lazy(() => import('./pages/MergeFinancialPdfsPage'))
+const MultiReceiptPdfCombinerPage  = lazy(() => import('./pages/MultiReceiptPdfCombinerPage'))
 const SplitPdfStatementsPage       = lazy(() => import('./pages/SplitPdfStatementsPage'))
 const CompressInvoicePdfsPage      = lazy(() => import('./pages/CompressInvoicePdfsPage'))
 const ReorderPdfPagesPage          = lazy(() => import('./pages/ReorderPdfPagesPage'))
@@ -72,11 +81,15 @@ const AddWatermarkToInvoicePage    = lazy(() => import('./pages/AddWatermarkToIn
 const PasswordProtectFinancialPdfsPage = lazy(() => import('./pages/PasswordProtectFinancialPdfsPage'))
 const UnlockPdfStatementsPage      = lazy(() => import('./pages/UnlockPdfStatementsPage'))
 const AddSignatureToPdfPage        = lazy(() => import('./pages/AddSignatureToPdfPage'))
+const DigitalSignatureScanToPdfPage = lazy(() => import('./pages/DigitalSignatureScanToPdfPage'))
 const RotateScannedDocumentsPage   = lazy(() => import('./pages/RotateScannedDocumentsPage'))
 const ReceiptImageToPdfPage        = lazy(() => import('./pages/ReceiptImageToPdfPage'))
+const ImageToFinancialPdfConverterPage = lazy(() => import('./pages/ImageToFinancialPdfConverterPage'))
 const PdfToCsvPage                 = lazy(() => import('./pages/PdfToCsvPage'))
+const TransactionHistoryPdfToCsvPage = lazy(() => import('./pages/TransactionHistoryPdfToCsvPage'))
 const ExcelToPdfPage               = lazy(() => import('./pages/ExcelToPdfPage'))
 const PdfToExcelPage               = lazy(() => import('./pages/PdfToExcelPage'))
+const PdfTableExtractorPage        = lazy(() => import('./pages/PdfTableExtractorPage'))
 const JpgReceiptToPdfPage          = lazy(() => import('./pages/JpgReceiptToPdfPage'))
 const PngReceiptToPdfPage          = lazy(() => import('./pages/PngReceiptToPdfPage'))
 const ScanToPdfPage                = lazy(() => import('./pages/ScanToPdfPage'))
@@ -85,6 +98,7 @@ const CsvToPdfConverterPage        = lazy(() => import('./pages/CsvToPdfConverte
 const FinancialReportPdfToExcelPage = lazy(() => import('./pages/FinancialReportPdfToExcelPage'))
 const OcrReceiptToTextPage         = lazy(() => import('./pages/OcrReceiptToTextPage'))
 const OcrInvoiceToExcelPage        = lazy(() => import('./pages/OcrInvoiceToExcelPage'))
+const ScanBankStatementToExcelPage = lazy(() => import('./pages/ScanBankStatementToExcelPage'))
 const GetStartedRedirect           = lazy(() => import('./pages/GetStartedRedirect'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
@@ -213,6 +227,10 @@ export default function App() {
             element={<LoanAmortizationPage />}
           />
           <Route
+            path="/tools/debt-repayment-planner-pdf"
+            element={<DebtRepaymentPlannerPdfPage />}
+          />
+          <Route
             path="/tools/gst-calculation-sheet"
             element={<GstCalculationSheetPage />}
           />
@@ -233,8 +251,24 @@ export default function App() {
             element={<BankStatementAnalyzerPage />}
           />
           <Route
+            path="/tools/banking-transaction-summary"
+            element={<BankingTransactionSummaryPage />}
+          />
+          <Route
             path="/tools/interest-calculation-sheet"
             element={<InterestCalcPage />}
+          />
+          <Route
+            path="/tools/investment-return-calculation-sheet"
+            element={<InvestmentReturnCalculationSheetPage />}
+          />
+          <Route
+            path="/tools/profit-margin-calculator"
+            element={<ProfitMarginCalculatorPage />}
+          />
+          <Route
+            path="/tools/break-even-analysis"
+            element={<BreakEvenAnalysisPage />}
           />
           <Route
             path="/tools/monthly-loan-payment"
@@ -277,6 +311,10 @@ export default function App() {
             element={<TaxSummaryReportPage />}
           />
           <Route
+            path="/tools/financial-year-tax-summary"
+            element={<FinancialYearTaxSummaryPage />}
+          />
+          <Route
             path="/tools/budget-planning-sheet"
             element={<BudgetPlanningPage />}
           />
@@ -313,6 +351,14 @@ export default function App() {
             element={<FinancialReportGeneratorPage />}
           />
           <Route
+            path="/tools/annual-financial-report"
+            element={<AnnualFinancialReportPage />}
+          />
+          <Route
+            path="/tools/inventory-valuation-report"
+            element={<InventoryValuationReportPage />}
+          />
+          <Route
             path="/tools/freelance-invoice-generator"
             element={<FreelanceInvoiceGeneratorPage />}
           />
@@ -335,6 +381,10 @@ export default function App() {
           <Route
             path="/tools/merge-financial-pdfs"
             element={<MergeFinancialPdfsPage />}
+          />
+          <Route
+            path="/tools/multi-receipt-pdf-combiner"
+            element={<MultiReceiptPdfCombinerPage />}
           />
           <Route
             path="/tools/split-pdf-statements"
@@ -365,6 +415,10 @@ export default function App() {
             element={<AddSignatureToPdfPage />}
           />
           <Route
+            path="/tools/digital-signature-scan-to-pdf"
+            element={<DigitalSignatureScanToPdfPage />}
+          />
+          <Route
             path="/tools/rotate-scanned-documents"
             element={<RotateScannedDocumentsPage />}
           />
@@ -373,8 +427,16 @@ export default function App() {
             element={<ReceiptImageToPdfPage />}
           />
           <Route
+            path="/tools/image-to-financial-pdf-converter"
+            element={<ImageToFinancialPdfConverterPage />}
+          />
+          <Route
             path="/tools/pdf-to-csv"
             element={<PdfToCsvPage />}
+          />
+          <Route
+            path="/tools/transaction-history-pdf-to-csv"
+            element={<TransactionHistoryPdfToCsvPage />}
           />
           <Route
             path="/tools/excel-to-pdf"
@@ -383,6 +445,10 @@ export default function App() {
           <Route
             path="/tools/pdf-to-excel"
             element={<PdfToExcelPage />}
+          />
+          <Route
+            path="/tools/pdf-table-extractor"
+            element={<PdfTableExtractorPage />}
           />
           <Route
             path="/tools/jpg-receipt-to-pdf"
@@ -415,6 +481,10 @@ export default function App() {
           <Route
             path="/tools/ocr-invoice-to-excel"
             element={<OcrInvoiceToExcelPage />}
+          />
+          <Route
+            path="/tools/scan-bank-statement-to-excel"
+            element={<ScanBankStatementToExcelPage />}
           />
           <Route path="/get-started" element={<GetStartedRedirect />} />
           <Route path="*" element={<NotFoundPage />} />
