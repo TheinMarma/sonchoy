@@ -13,8 +13,23 @@
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
+
+    // Consent Mode v2 — deny ad-related signals by default so gtag.js doesn't
+    // invoke the deprecated Attribution Reporting API. Flip these to 'granted'
+    // from a cookie banner if/when the user opts in.
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'granted'
+    });
+
     gtag('js', new Date());
-    gtag('config', 'G-KVWPT8FMTS');
+    gtag('config', 'G-KVWPT8FMTS', {
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+      ads_data_redaction: true
+    });
   </script>
 </head>
 

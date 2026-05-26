@@ -1,0 +1,8 @@
+# robots.txt for sonchoy.com
+# Allow all crawlers, with a sitemap reference.
+
+User-agent: *
+Allow: /
+Disallow: /get-started
+
+Sitemap: https://sonchoy.com/sitemap.xml
