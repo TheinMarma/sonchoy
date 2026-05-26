@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import CursorGlow from './components/CursorGlow'
 import BackToTop from './components/BackToTop'
 import ScrollToTop from './components/ScrollToTop'
+import RouteMeta from './components/RouteMeta'
 import HomePage from './pages/HomePage'
 
 /* Lazy-load tool pages — keeps pdf.js + xlsx out of the homepage bundle. */
@@ -117,6 +118,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <RouteMeta />
       <CursorGlow />
       <TopNav />
       <Suspense fallback={<ToolPageFallback />}>

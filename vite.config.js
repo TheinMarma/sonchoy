@@ -45,6 +45,50 @@ function inlineEntryCss() {
 }
 
 /**
+ * Build-time sitemap generator. Parses `src/components/ToolsSection.jsx`
+ * for every `path: '/tools/...'` entry and emits a `sitemap.xml` into the
+ * build output. Keeps the sitemap in sync with the live tool list with
+ * zero manual upkeep — adding a new tool to TOOLS automatically adds it
+ * to the sitemap on the next build.
+ */
+function emitSitemap() {
+  const SITE_ORIGIN = 'https://sonchoy.com'
+  return {
+    name: 'emit-sitemap',
+    apply: 'build',
+    generateBundle() {
+      const src = fs.readFileSync(
+        path.resolve('src/components/ToolsSection.jsx'),
+        'utf8',
+      )
+      const paths = new Set(['/'])
+      const re = /path:\s*'(\/tools\/[a-z0-9-]+)'/g
+      let m
+      while ((m = re.exec(src))) paths.add(m[1])
+
+      const today = new Date().toISOString().slice(0, 10)
+      const urls = [...paths].map((p) => {
+        const priority = p === '/' ? '1.0' : '0.7'
+        const changefreq = p === '/' ? 'weekly' : 'monthly'
+        return `  <url>
+    <loc>${SITE_ORIGIN}${p}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`
+      }).join('\n')
+
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>
+`
+      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: xml })
+    },
+  }
+}
+
+/**
  * Mark the entry module script as high-priority so the browser starts
  * fetching it the moment the HTML pre-loader scanner discovers it — before
  * any in-body content is parsed. Shortens the critical chain by letting
@@ -68,5 +112,5 @@ function prioritizeEntryScript() {
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), inlineEntryCss(), prioritizeEntryScript()],
+  plugins: [react(), tailwindcss(), inlineEntryCss(), prioritizeEntryScript(), emitSitemap()],
 })
