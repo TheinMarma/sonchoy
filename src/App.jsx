@@ -101,6 +101,8 @@ const OcrReceiptToTextPage         = lazy(() => import('./pages/OcrReceiptToText
 const OcrInvoiceToExcelPage        = lazy(() => import('./pages/OcrInvoiceToExcelPage'))
 const ScanBankStatementToExcelPage = lazy(() => import('./pages/ScanBankStatementToExcelPage'))
 const GetStartedRedirect           = lazy(() => import('./pages/GetStartedRedirect'))
+const TermsPage                    = lazy(() => import('./pages/TermsPage'))
+const PrivacyPage                  = lazy(() => import('./pages/PrivacyPage'))
 const NotFoundPage                 = lazy(() => import('./pages/NotFoundPage'))
 
 function ToolPageFallback() {
@@ -489,6 +491,8 @@ export default function App() {
             element={<ScanBankStatementToExcelPage />}
           />
           <Route path="/get-started" element={<GetStartedRedirect />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

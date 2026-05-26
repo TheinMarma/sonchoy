@@ -30,6 +30,8 @@ const DEFAULT_DESCRIPTION =
 const STATIC_META = {
   '/':              { title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION },
   '/get-started':   { title: 'Pick a Random Tool — Sonchoy', description: 'Jumping you into one of our 90+ free finance and PDF tools at random. No signup, runs in your browser.' },
+  '/terms':         { title: 'Terms of Service — Sonchoy', description: 'The rules of the road for using Sonchoy — free finance and PDF tools that run entirely in your browser.' },
+  '/privacy':       { title: 'Privacy Policy — Sonchoy', description: 'How Sonchoy handles your data — short answer, we don’t. Files never leave your browser. Read the full policy.' },
 }
 
 function setMeta(name, content, attr = 'name') {
