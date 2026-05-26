@@ -22,8 +22,16 @@
       href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
   </noscript>
 
-  <!-- Google tag (gtag.js) — deferred to window load so it never competes
-       with the critical bundle on FCP/LCP. -->
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Google tag (gtag.js) — moved out of <head> and deferred to window load.
+       Setting up dataLayer + consent + config first so any in-flight events
+       queue correctly; the actual gtag library only loads after the page is
+       interactive, so it never competes with the critical JS for bandwidth. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
@@ -45,8 +53,6 @@
       ads_data_redaction: true
     });
 
-    // Load the actual gtag library after the page is interactive so it
-    // doesn't steal bandwidth from FCP/LCP-critical assets.
     window.addEventListener('load', function () {
       var s = document.createElement('script');
       s.async = true;
@@ -54,11 +60,6 @@
       document.head.appendChild(s);
     });
   </script>
-</head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
 </body>
 
 </html>

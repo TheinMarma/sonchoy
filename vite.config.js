@@ -44,6 +44,29 @@ function inlineEntryCss() {
   }
 }
 
+/**
+ * Mark the entry module script as high-priority so the browser starts
+ * fetching it the moment the HTML pre-loader scanner discovers it — before
+ * any in-body content is parsed. Shortens the critical chain by letting
+ * JS download overlap with HTML parsing more aggressively.
+ */
+function prioritizeEntryScript() {
+  return {
+    name: 'prioritize-entry-script',
+    apply: 'build',
+    enforce: 'post',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html) {
+        return html.replace(
+          /<script\s+type="module"\s+crossorigin\s+src="(\/assets\/[^"]+\.js)"><\/script>/,
+          (_, src) => `<script type="module" crossorigin fetchpriority="high" src="${src}"></script>`,
+        )
+      },
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), inlineEntryCss()],
+  plugins: [react(), tailwindcss(), inlineEntryCss(), prioritizeEntryScript()],
 })
