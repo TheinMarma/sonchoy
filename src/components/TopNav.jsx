@@ -8,15 +8,25 @@ import { BrandMark, Caret, ArrowRight, SearchIcon } from './icons'
 function useToolsAnchorHandler() {
   const navigate = useNavigate()
   const location = useLocation()
-  return (e) => {
+  return (e, filterId) => {
     if (e?.metaKey || e?.ctrlKey || e?.shiftKey || (e && e.button !== 0 && e.button !== undefined)) return
     e?.preventDefault?.()
+    const hash = filterId ? `tools?filter=${encodeURIComponent(filterId)}` : 'tools'
     if (location.pathname === '/') {
+      // Update the hash so ToolsSection can react, then scroll.
+      if (window.location.hash !== `#${hash}`) {
+        // Replace the hash without adding a new history entry, then dispatch
+        // a hashchange event manually so listeners (ToolsSection) react when
+        // the user clicks the same filter twice.
+        window.history.replaceState(null, '', `#${hash}`)
+        window.dispatchEvent(new HashChangeEvent('hashchange'))
+      } else {
+        window.dispatchEvent(new HashChangeEvent('hashchange'))
+      }
       const el = document.getElementById('tools')
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      else window.location.hash = 'tools'
     } else {
-      navigate('/#tools')
+      navigate(`/#${hash}`)
     }
   }
 }
@@ -26,6 +36,7 @@ function useToolsAnchorHandler() {
 const MENUS = {
   invoicing: {
     label: 'Invoicing',
+    filterId: 'invoicing',
     columns: [
       {
         title: 'Invoice generators',
@@ -48,6 +59,7 @@ const MENUS = {
   },
   accounting: {
     label: 'Accounting',
+    filterId: 'accounting',
     columns: [
       {
         title: 'Statements & ledgers',
@@ -79,6 +91,7 @@ const MENUS = {
   },
   tax: {
     label: 'Tax & Banking',
+    filterId: 'tax',
     columns: [
       {
         title: 'Tax',
@@ -111,6 +124,7 @@ const MENUS = {
   },
   documents: {
     label: 'Documents',
+    filterId: 'documents',
     columns: [
       {
         title: 'Contracts',
@@ -187,8 +201,8 @@ function MegaMenu({ menu }) {
         </div>
         <div className="mt-4 flex items-center justify-between border-t border-line pt-3">
           <a
-            href="/#tools"
-            onClick={handleToolsClick}
+            href={menu.filterId ? `/#tools?filter=${menu.filterId}` : '/#tools'}
+            onClick={(e) => handleToolsClick(e, menu.filterId)}
             className="inline-flex items-center gap-2 px-2 text-[13px] font-medium text-crimson-300 no-underline hover:text-crimson-400"
           >
             {menu.seeAll}
@@ -351,8 +365,8 @@ function MobileSection({ id, expanded, setExpanded, onClose }) {
               </div>
             ))}
             <a
-              href="/#tools"
-              onClick={(e) => { handleToolsClick(e); onClose?.(e) }}
+              href={menu.filterId ? `/#tools?filter=${menu.filterId}` : '/#tools'}
+              onClick={(e) => { handleToolsClick(e, menu.filterId); onClose?.(e) }}
               className="inline-flex items-center gap-2 text-[13px] font-medium text-crimson-300 no-underline hover:text-crimson-400"
             >
               {menu.seeAll}

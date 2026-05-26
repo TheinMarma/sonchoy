@@ -198,32 +198,40 @@ function ToolTile({ tool }) {
 
 const PAGE_LIMIT = 16
 
-/** Parse `#tools?q=foo` style hash → { q } */
+/** Parse `#tools?q=foo&filter=invoicing` style hash → { q, filter } */
 function readHashQuery() {
-  if (typeof window === 'undefined') return ''
+  if (typeof window === 'undefined') return { q: '', filter: '' }
   const hash = window.location.hash || ''
   const i = hash.indexOf('?')
-  if (i === -1) return ''
+  if (i === -1) return { q: '', filter: '' }
   try {
     const p = new URLSearchParams(hash.slice(i + 1))
-    return p.get('q') || ''
+    return { q: p.get('q') || '', filter: p.get('filter') || '' }
   } catch {
-    return ''
+    return { q: '', filter: '' }
   }
 }
 
-export default function ToolsSection() {
-  const [filter, setFilter] = useState('all')
-  const [showAll, setShowAll] = useState(false)
-  const [query, setQuery] = useState(() => readHashQuery())
+const VALID_FILTERS = new Set(['all', 'conversion', 'pdf', 'invoicing', 'documents', 'accounting', 'tax', 'contracts'])
 
-  // Listen for hash changes (e.g. when the header search submits)
+export default function ToolsSection() {
+  const initial = readHashQuery()
+  const [filter, setFilter] = useState(
+    VALID_FILTERS.has(initial.filter) ? initial.filter : 'all',
+  )
+  const [showAll, setShowAll] = useState(false)
+  const [query, setQuery] = useState(initial.q)
+
+  // Listen for hash changes (header search, dropdown "View all" links, etc.)
   useEffect(() => {
     const onHash = () => {
-      const q = readHashQuery()
+      const { q, filter: f } = readHashQuery()
       setQuery(q)
-      if (q && typeof window !== 'undefined') {
-        // Scroll into view so the user sees the filtered results
+      if (VALID_FILTERS.has(f)) {
+        setFilter(f)
+        setShowAll(false)
+      }
+      if ((q || f) && typeof window !== 'undefined') {
         const el = document.getElementById('tools')
         el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }
