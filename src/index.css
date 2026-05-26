@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
+/* Google Fonts are loaded directly from index.html with preconnect + a
+   parallel <link rel="stylesheet">. Doing it there breaks the CSS-import
+   waterfall (index.css -> fonts.googleapis CSS -> font files) and lets the
+   font fetch start during the initial HTML parse instead of after CSS. */
 @import "tailwindcss";
 
 /* ============================================

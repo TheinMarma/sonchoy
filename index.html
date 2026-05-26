@@ -8,8 +8,22 @@
   <title>Sonchoy — Free, fast PDF tools for everyday document work</title>
   <meta name="description"
     content="Convert, edit, and generate PDFs in seconds. 25+ free tools — and a doorway to advanced features through pdfFiller's free trial." />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVWPT8FMTS"></script>
+
+  <!-- Fonts: preconnect + parallel stylesheet (faster than @import inside CSS) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
+  </noscript>
+
+  <!-- Google tag (gtag.js) — deferred to window load so it never competes
+       with the critical bundle on FCP/LCP. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
@@ -29,6 +43,15 @@
       allow_google_signals: false,
       allow_ad_personalization_signals: false,
       ads_data_redaction: true
+    });
+
+    // Load the actual gtag library after the page is interactive so it
+    // doesn't steal bandwidth from FCP/LCP-critical assets.
+    window.addEventListener('load', function () {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KVWPT8FMTS';
+      document.head.appendChild(s);
     });
   </script>
 </head>
