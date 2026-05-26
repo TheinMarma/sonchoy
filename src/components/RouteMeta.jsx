@@ -23,13 +23,13 @@ import { TOOLS } from './ToolsSection'
 
 const SITE_NAME    = 'Sonchoy'
 const SITE_ORIGIN  = 'https://sonchoy.com'
-const DEFAULT_TITLE       = 'Sonchoy — Free, fast PDF tools for everyday document work'
+const DEFAULT_TITLE       = '90+ Free Invoice, PDF & Accounting Tools — Sonchoy'
 const DEFAULT_DESCRIPTION =
-  "Convert, edit, and generate PDFs in seconds. 100+ free finance & PDF tools — and a doorway to advanced features through pdfFiller's free trial."
+  'Generate invoices, convert PDFs to Excel, build financial reports, and extract bank statements — instantly, in your browser. 90+ free finance & PDF tools, no signup.'
 
 const STATIC_META = {
   '/':              { title: DEFAULT_TITLE, description: DEFAULT_DESCRIPTION },
-  '/get-started':   { title: 'Pick a tool — Sonchoy', description: 'Jumping you into one of our finance or PDF tools at random. Free, no signup.' },
+  '/get-started':   { title: 'Pick a Random Tool — Sonchoy', description: 'Jumping you into one of our 90+ free finance and PDF tools at random. No signup, runs in your browser.' },
 }
 
 function setMeta(name, content, attr = 'name') {
