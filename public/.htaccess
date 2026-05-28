@@ -1,62 +1,46 @@
 # ---------------------------------------------------------------------
-#  Sonchoy — Apache (Hostinger) config
-#  Single-page-app routing + sensible caching + compression.
+#  Sonchoy — Apache (Hostinger) config for Next.js static export
+#
+#  Next.js writes to `out/` with `trailingSlash: true`, so every route
+#  becomes its own `index.html` (e.g. /tools/invoice-generator/index.html).
+#  Apache serves those files directly — no rewrite gymnastics needed for
+#  valid routes. The 404.html captures everything else.
 # ---------------------------------------------------------------------
 
-# --- SPA fallback ----------------------------------------------------
-# Any URL that doesn't map to a real file or directory should serve
-# index.html, so React Router can resolve it (incl. the 404 route).
-
+# --- Pretty URLs / trailing slashes -----------------------------------
+# Hostinger sometimes serves /tools/foo (no slash) as a hard 404 instead
+# of looking for /tools/foo/index.html. Force a redirect to the slashed
+# form so users always land on the prerendered HTML.
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # Force HTTPS (uncomment if Hostinger isn't already doing this)
+  # Force HTTPS (uncomment if Hostinger isn't already doing it)
   # RewriteCond %{HTTPS} off
   # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # If the request is for an existing file or directory, serve it as-is
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  # If a request hits a directory (no trailing slash), redirect to /foo/
   RewriteCond %{REQUEST_FILENAME} -d
-  RewriteRule ^ - [L]
-
-  # Otherwise hand off to React (index.html). The SPA shows the 404 page
-  # client-side via the catch-all <Route path="*"> in App.jsx.
-  RewriteRule ^ /index.html [L]
+  RewriteCond %{REQUEST_URI} !(/$)
+  RewriteRule ^(.+)$ /$1/ [L,R=301]
 </IfModule>
 
 # --- Caching ---------------------------------------------------------
-# Vite emits hashed asset filenames, so hashed files can be cached
-# aggressively. index.html must NOT be cached or new deploys won't ship.
-
-<IfModule mod_expires.c>
-  ExpiresActive On
-
-  # HTML — never cache, always revalidate
-  ExpiresByType text/html                 "access plus 0 seconds"
-
-  # Hashed JS / CSS / fonts / images — long cache
-  ExpiresByType application/javascript    "access plus 1 year"
-  ExpiresByType text/javascript           "access plus 1 year"
-  ExpiresByType text/css                  "access plus 1 year"
-  ExpiresByType image/svg+xml             "access plus 1 year"
-  ExpiresByType image/png                 "access plus 1 year"
-  ExpiresByType image/jpeg                "access plus 1 year"
-  ExpiresByType image/webp                "access plus 1 year"
-  ExpiresByType image/x-icon              "access plus 1 year"
-  ExpiresByType font/woff                 "access plus 1 year"
-  ExpiresByType font/woff2                "access plus 1 year"
-</IfModule>
+# Next.js fingerprints everything under /_next/static/, so those are safe
+# to cache forever. HTML must NOT be cached (new deploys need to land).
 
 <IfModule mod_headers.c>
-  # Hashed Vite assets are immutable — keep them in browser cache for a year.
-  # This is the reliable way to set TTL (mod_expires isn't always enabled on
-  # shared hosts / behind Cloudflare). Lighthouse picks this up directly.
+  # Hashed Next.js assets — immutable, one year.
   <FilesMatch "\.(?:js|mjs|css|woff2?|ttf|otf|eot|svg|png|jpe?g|gif|webp|avif|ico)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 
-  # Belt-and-braces: stop intermediate caches from serving stale index.html
+  # Belt-and-braces for the /_next/static/ tree
+  <If "%{REQUEST_URI} =~ m#^/_next/static/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+
+  # HTML — always revalidate
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
@@ -74,5 +58,7 @@
   AddOutputFilterByType DEFLATE image/svg+xml font/woff font/woff2
 </IfModule>
 
-# --- 404 fallback (only fires if mod_rewrite is unavailable) ---------
-ErrorDocument 404 /index.html
+# --- 404 page --------------------------------------------------------
+# Next.js exports the Not Found UI to /404.html. Point Apache at it so
+# unknown routes get the branded page (and a real 404 status).
+ErrorDocument 404 /404.html

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*":            ["./*"],
+      "@/app/*":        ["./app/*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*":        ["./lib/*"],
+      "@/public/*":     ["./public/*"]
+    }
+  },
+  "include": ["app/**/*", "components/**/*", "lib/**/*", "next.config.mjs"]
+}
