@@ -92,6 +92,8 @@ export default function Footer() {
             © 2026 Sonchoy · Built for finance teams
           </span>
           <div className="flex gap-4">
+            <Link href="/about" className="text-ink-500 no-underline hover:text-ink-950 transition-colors">About</Link>
+            <Link href="/contact" className="text-ink-500 no-underline hover:text-ink-950 transition-colors">Contact</Link>
             <Link href="/terms" className="text-ink-500 no-underline hover:text-ink-950 transition-colors">Terms</Link>
             <Link href="/privacy" className="text-ink-500 no-underline hover:text-ink-950 transition-colors">Privacy</Link>
           </div>
