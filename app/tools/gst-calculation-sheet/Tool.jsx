@@ -789,7 +789,7 @@ const FEATURES = [
   { title: 'HSN/SAC per line',       desc: 'Each line carries its HSN (goods) or SAC (services) code, the rate, and the description. The HSN summary rolls everything up for the workings file.' },
   { title: 'Reverse-charge support', desc: 'Flag any line as RCM. GST is calculated as normal but excluded from the line total — and called out separately in its own block.' },
   { title: 'Standard rate dropdown', desc: 'Rates 0%, 0.25%, 3%, 5%, 12%, 18%, 28% — the full Indian GST slab — plus a 0% option for exempt and zero-rated supplies.' },
-  { title: 'Rate &amp; HSN summary',  desc: 'Automatic rollups by GST rate and by HSN/SAC code. Useful for cross-checking against GSTR-1 table 12 (HSN summary) and table 9 (rate-wise).' },
+  { title: 'Rate & HSN summary',  desc: 'Automatic rollups by GST rate and by HSN/SAC code. Useful for cross-checking against GSTR-1 table 12 (HSN summary) and table 9 (rate-wise).' },
   { title: 'PDF + 4-sheet XLSX',     desc: 'PDF: summary cards, line items, rate summary, HSN summary, RCM block. XLSX: Summary, Line Items, By Rate, By HSN — all numeric, ready for pivots.' },
 ]
 
@@ -810,7 +810,7 @@ function Features() {
               <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-md border border-tax/20 bg-tax-bg text-tax">
                 <Check size={16} />
               </div>
-              <h4 className="m-0 mb-2 text-lg font-medium tracking-[-0.015em] text-ink-950" dangerouslySetInnerHTML={{ __html: f.title }} />
+              <h4 className="m-0 mb-2 text-lg font-medium tracking-[-0.015em] text-ink-950">{f.title}</h4>
               <p className="m-0 text-md leading-[1.55] text-ink-600">{f.desc}</p>
             </div>
           ))}
