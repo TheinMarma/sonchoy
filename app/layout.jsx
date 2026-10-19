@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import ScrollToTop from '@/components/ScrollToTop'
 import CursorGlow from '@/components/CursorGlow'
 import BackToTop from '@/components/BackToTop'
+import { SITE_ORIGIN, SITE_NAME, OG_IMAGE } from '@/lib/seo'
 
 /**
  * Root layout — server component. This is where the SEO-critical metadata
@@ -11,11 +12,9 @@ import BackToTop from '@/components/BackToTop'
  * their own `metadata` (or `generateMetadata`) to override per-route fields.
  */
 
-const SITE_ORIGIN = 'https://sonchoy.com'
-const SITE_NAME   = 'Sonchoy'
 const DEFAULT_TITLE       = '90+ Free Invoice, PDF & Accounting Tools — Sonchoy'
 const DEFAULT_DESCRIPTION =
-  'Generate invoices, convert PDFs to Excel, build financial reports, and extract bank statements — instantly, in your browser. 90+ free finance & PDF tools, no signup.'
+  'Create invoices, convert PDFs to Excel, build financial reports and extract bank statements — right in your browser. 90+ free finance & PDF tools, no signup.'
 
 export const metadata = {
   metadataBase: new URL(SITE_ORIGIN),
@@ -43,14 +42,17 @@ export const metadata = {
   openGraph: {
     type:        'website',
     siteName:    SITE_NAME,
-    url:         SITE_ORIGIN,
+    locale:      'en_US',
+    url:         '/',
     title:       DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
+    images:      [OG_IMAGE],
   },
   twitter: {
     card:        'summary_large_image',
     title:       DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
+    images:      [OG_IMAGE.url],
   },
   icons: {
     icon: '/favicon.svg',

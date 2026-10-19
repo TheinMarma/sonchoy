@@ -384,9 +384,9 @@ function Uploader({ status, fileMeta, error, onPick, onDrop, onReset, onDownload
                 Try another PDF
               </button>
               <a
-                href="https://go.sonchoy.com/pdfFiller"
+                href="https://www.awin1.com/cread.php?awinmid=94003&awinaffid=1952001"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="sponsored nofollow noopener noreferrer"
                 className="btn btn-secondary btn-lg"
               >
                 Use pdfFiller premium
@@ -407,9 +407,9 @@ function Uploader({ status, fileMeta, error, onPick, onDrop, onReset, onDownload
             ))}
           </div>
           <a
-            href="https://go.sonchoy.com/pdfFiller"
+            href="https://www.awin1.com/cread.php?awinmid=94003&awinaffid=1952001"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="sponsored nofollow noopener noreferrer"
             className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-crimson-300 no-underline hover:text-crimson-400"
           >
             Need multi-account?
