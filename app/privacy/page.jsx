@@ -1,17 +1,12 @@
 import Link from 'next/link'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
+  path:  '/privacy/',
   title: 'Privacy Policy',
   description:
-    'How Sonchoy handles your data — short answer, we don’t. Files never leave your browser. Read the full policy.',
-  alternates: { canonical: '/privacy' },
-  openGraph: {
-    title: 'Privacy Policy — Sonchoy',
-    description:
-      'How Sonchoy handles your data — short answer, we don’t. Files never leave your browser. Read the full policy.',
-    url: '/privacy',
-  },
-}
+    'How Sonchoy handles your data — short answer, we don’t. Files never leave your browser and we only collect anonymous analytics. Read the full policy.',
+})
 
 const SECTIONS = [
   {

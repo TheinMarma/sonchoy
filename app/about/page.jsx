@@ -1,18 +1,13 @@
 import Link from 'next/link'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
+  path:  '/about/',
   title: 'About Sonchoy — Free Finance & PDF Tools',
+  socialTitle: 'About Sonchoy — Free Finance & PDF Tools',
   description:
     'Sonchoy builds free, privacy-first finance and PDF tools that run entirely in your browser. 90+ generators, converters, and calculators — no signup, no uploads.',
-  alternates: { canonical: '/about/' },
-  openGraph: {
-    title:       'About Sonchoy — Free Finance & PDF Tools',
-    description: 'The story behind 90+ free, privacy-first finance and PDF tools.',
-    url:         'https://sonchoy.com/about/',
-    type:        'website',
-    siteName:    'Sonchoy',
-  },
-}
+})
 
 const PRINCIPLES = [
   {

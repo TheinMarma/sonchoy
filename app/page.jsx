@@ -6,12 +6,12 @@ import FaqDialogue from '@/components/faqs/FaqDialogue'
 import HowStepperTabs from '@/components/howitworks/HowStepperTabs'
 
 const STRIP_LOGOS = [
-  { name: 'Carousel', suffix: 'Checks',    href: 'https://go.sonchoy.com/CarouselChecks' },
-  { name: 'Lesko',    suffix: null,        href: 'https://go.sonchoy.com/Lesko' },
-  { name: 'Scholar',  suffix: 'Trip',      href: 'https://go.sonchoy.com/ScholarTrip' },
-  { name: 'BGASC',    suffix: null,        href: 'https://go.sonchoy.com/BGASC' },
-  { name: 'Clear',    suffix: 'Screening', href: 'https://go.sonchoy.com/ClearScreening' },
-  { name: 'Bonzah',   suffix: null,        href: 'https://go.sonchoy.com/Bonzah' },
+  { name: 'Carousel', suffix: 'Checks',    href: 'https://www.awin1.com/cread.php?awinmid=88009&awinaffid=1952001' },
+  { name: 'Lesko',    suffix: null,        href: 'https://www.awin1.com/cread.php?awinmid=110836&awinaffid=1952001' },
+  { name: 'Scholar',  suffix: 'Trip',      href: 'https://www.awin1.com/cread.php?awinmid=95023&awinaffid=1952001' },
+  { name: 'BGASC',    suffix: null,        href: 'https://www.awin1.com/cread.php?awinmid=88771&awinaffid=1952001' },
+  { name: 'Clear',    suffix: 'Screening', href: 'https://www.awin1.com/cread.php?awinmid=88367&awinaffid=1952001' },
+  { name: 'Bonzah',   suffix: null,        href: 'https://www.awin1.com/cread.php?awinmid=90261&awinaffid=1952001' },
 ]
 
 function TrustStrip() {
@@ -26,7 +26,7 @@ function TrustStrip() {
             key={name}
             href={href}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="sponsored nofollow noopener noreferrer"
             className="font-serif text-[20px] italic tracking-[-0.02em] text-ink-600 no-underline hover:text-ink-900 transition-colors"
           >
             {name}

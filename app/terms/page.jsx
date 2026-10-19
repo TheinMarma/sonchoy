@@ -1,17 +1,12 @@
 import Link from 'next/link'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
+export const metadata = pageMetadata({
+  path:  '/terms/',
   title: 'Terms of Service',
   description:
-    'The rules of the road for using Sonchoy — free finance and PDF tools that run entirely in your browser.',
-  alternates: { canonical: '/terms' },
-  openGraph: {
-    title: 'Terms of Service — Sonchoy',
-    description:
-      'The rules of the road for using Sonchoy — free finance and PDF tools that run entirely in your browser.',
-    url: '/terms',
-  },
-}
+    'The rules of the road for using Sonchoy — free finance and PDF tools that run entirely in your browser. Acceptable use, warranty, liability, and governing law.',
+})
 
 const SECTIONS = [
   {

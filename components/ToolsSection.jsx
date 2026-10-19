@@ -384,6 +384,12 @@ export default function ToolsSection() {
                 ? `Showing all ${totalInFilter}`
                 : `Showing ${visible.length} of ${totalInFilter}`}
             </span>
+            <Link
+              href="/tools/"
+              className="font-mono text-[11px] uppercase tracking-[0.08em] text-crimson-300 no-underline hover:text-crimson-400"
+            >
+              Browse the full tools index →
+            </Link>
           </div>
         )}
       </div>

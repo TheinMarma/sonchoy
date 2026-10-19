@@ -15,6 +15,17 @@
   RewriteEngine On
   RewriteBase /
 
+  # Canonical host: www.sonchoy.com → https://sonchoy.com. Without this
+  # every page is served twice (duplicate content). Directory requests get
+  # their trailing slash in the same hop so there's never a redirect chain.
+  RewriteCond %{HTTP_HOST} ^www\.sonchoy\.com$ [NC]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^(.*)$ https://sonchoy.com/$1/ [L,R=301]
+
+  RewriteCond %{HTTP_HOST} ^www\.sonchoy\.com$ [NC]
+  RewriteRule ^(.*)$ https://sonchoy.com/$1 [L,R=301]
+
   # Force HTTPS
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
@@ -58,6 +69,7 @@
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
   AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE application/xml text/xml
   AddOutputFilterByType DEFLATE image/svg+xml font/woff font/woff2
 </IfModule>
 

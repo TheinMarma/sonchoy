@@ -83,9 +83,9 @@ export default function PromoBento({ tone = 'paper' }) {
               </p>
               <div className="mt-auto flex flex-wrap items-center gap-4">
                 <a
-                  href="https://go.sonchoy.com/pdfFiller"
+                  href="https://www.awin1.com/cread.php?awinmid=94003&awinaffid=1952001"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="sponsored nofollow noopener noreferrer"
                   className="btn btn-cta btn-xl"
                 >
                   Try Premium Free

@@ -1,18 +1,12 @@
 import Link from 'next/link'
+import { pageMetadata } from '@/lib/seo'
 
-export const metadata = {
-  title: 'Contact — Sonchoy',
+export const metadata = pageMetadata({
+  path:  '/contact/',
+  title: 'Contact',
   description:
     'Get in touch with the Sonchoy team. Bug reports, feature requests, partnerships, or just to say hi — email hello@sonchoy.com.',
-  alternates: { canonical: '/contact/' },
-  openGraph: {
-    title:       'Contact — Sonchoy',
-    description: 'Get in touch with the Sonchoy team.',
-    url:         'https://sonchoy.com/contact/',
-    type:        'website',
-    siteName:    'Sonchoy',
-  },
-}
+})
 
 const REASONS = [
   {
