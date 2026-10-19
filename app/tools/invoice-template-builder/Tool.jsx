@@ -17,6 +17,7 @@ import {
   hexToRgb, isAccentDark,
 } from '@/lib/invoice-template/compute'
 import { generateTemplateSamplePdf, downloadTemplateJson } from '@/lib/invoice-template/generatePdf'
+import EmailOff from '@/components/EmailOff'
 
 /* ---------- Local helpers ---------- */
 
@@ -696,7 +697,7 @@ function TemplateMock() {
           <div>
             <p className="m-0 text-[14px] font-bold text-ink-950">Sonchoy Studio Pvt Ltd</p>
             <p className="m-0 mt-1 text-[9px] text-ink-500">Brigade Road, Bengaluru 560001</p>
-            <p className="m-0 text-[9px] text-ink-500">billing@sonchoystudio.com</p>
+            <p className="m-0 text-[9px] text-ink-500"><EmailOff text="billing@sonchoystudio.com" /></p>
           </div>
           <div className="text-right">
             <p className="m-0 text-[18px] font-bold tracking-[-0.01em]" style={{ color: '#B46E05' }}>INVOICE</p>
@@ -709,7 +710,7 @@ function TemplateMock() {
         <div className="mt-4">
           <p className="m-0 font-mono text-[7px] font-bold uppercase tracking-[0.1em]" style={{ color: '#B46E05' }}>BILL TO</p>
           <p className="m-0 mt-1 text-[12px] font-bold text-ink-950">Northwind Books Pvt Ltd</p>
-          <p className="m-0 text-[9px] text-ink-700">marcus@northwindbooks.in</p>
+          <p className="m-0 text-[9px] text-ink-700"><EmailOff text="marcus@northwindbooks.in" /></p>
         </div>
 
         <div className="mt-3 overflow-hidden rounded border border-line">

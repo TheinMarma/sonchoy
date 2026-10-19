@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { pageMetadata } from '@/lib/seo'
+import EmailOff from '@/components/EmailOff'
 
 export const metadata = pageMetadata({
   path:  '/privacy/',
@@ -170,12 +171,11 @@ const SECTIONS = [
     body: (
       <>
         Privacy questions? Email{' '}
-        <a
+        <EmailOff
           href="mailto:hello@sonchoy.com"
           className="text-crimson-300 no-underline hover:text-crimson-400"
-        >
-          hello@sonchoy.com
-        </a>
+          text="hello@sonchoy.com"
+        />
         .
       </>
     ),

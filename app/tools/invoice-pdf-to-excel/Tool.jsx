@@ -11,6 +11,7 @@ import CalloutStatHook from '@/components/callouts/CalloutStatHook'
 import { extractTextFromPdf, isLikelyScanned } from '@/lib/pdfExtract'
 import { parseInvoice } from '@/lib/parseInvoice'
 import { buildWorkbook, downloadWorkbook, suggestedFilename } from '@/lib/buildWorkbook'
+import EmailOff from '@/components/EmailOff'
 
 const MAX_BYTES = 25 * 1024 * 1024 /* 25 MB */
 
@@ -505,7 +506,7 @@ function PreviewSection({ invoice, isReal }) {
                   </div>
                   <div>
                     <dt className="m-0 mb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-500">Bill to</dt>
-                    <dd className="m-0 text-[12px] leading-[1.5] text-ink-800">{invoice.buyer || '—'}</dd>
+                    <dd className="m-0 text-[12px] leading-[1.5] text-ink-800"><EmailOff text={invoice.buyer || '—'} /></dd>
                   </div>
                 </dl>
 

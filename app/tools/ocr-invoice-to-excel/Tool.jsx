@@ -19,6 +19,7 @@ import {
    loaded dynamically the first time the user clicks "Extract", so this
    import doesn't bloat the page bundle. */
 import { runOcr, fileToDataUrl, loadImageSize } from '@/lib/ocr-receipt/ocrEngine'
+import EmailOff from '@/components/EmailOff'
 
 /* ---------- Local helpers ---------- */
 
@@ -476,7 +477,7 @@ function OutputMock() {
           ].map(([k, v]) => (
             <div key={k} className="flex items-center justify-between border-b border-line/50 py-0.5">
               <span className="text-ink-500">{k}</span>
-              <span className="text-ink-950">{v}</span>
+              <span className="text-ink-950">{k === 'Email' ? <EmailOff text={v} /> : v}</span>
             </div>
           ))}
         </div>

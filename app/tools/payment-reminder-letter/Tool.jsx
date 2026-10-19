@@ -17,6 +17,7 @@ import {
 } from '@/lib/paymentReminder/compute'
 import { generatePaymentReminderPdf } from '@/lib/paymentReminder/generatePdf'
 import { generatePaymentReminderDocx } from '@/lib/paymentReminder/generateDocx'
+import EmailOff from '@/components/EmailOff'
 
 /* ---------- Local helpers ---------- */
 
@@ -656,7 +657,7 @@ function LetterMock() {
           <div>
             <p className="m-0 text-[12px] font-bold text-ink-950">Sonchoy Studio Ltd.</p>
             <p className="m-0 mt-0.5 text-[9px] text-ink-500">7 Old Street, London EC1V 9HL</p>
-            <p className="m-0 text-[9px] text-ink-500">accounts@sonchoystudio.com · +44 20 7946 0011</p>
+            <p className="m-0 text-[9px] text-ink-500"><EmailOff text="accounts@sonchoystudio.com" /> · +44 20 7946 0011</p>
           </div>
           <div className="text-right">
             <span className="inline-block rounded bg-amber-500 px-2 py-0.5 font-mono text-[8px] font-bold text-white">PAYMENT REMINDER</span>

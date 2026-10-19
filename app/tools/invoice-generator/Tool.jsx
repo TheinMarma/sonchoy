@@ -18,6 +18,7 @@ import {
 import { generateInvoicePdf } from '@/lib/invoice/generatePdf'
 import { generateInvoiceDocx } from '@/lib/invoice/generateDocx'
 import { generateInvoiceXlsx } from '@/lib/invoice/generateXlsx'
+import EmailOff from '@/components/EmailOff'
 
 /* ---------- Local helpers ---------- */
 
@@ -681,7 +682,7 @@ function InvoiceMock() {
         <div>
           <dt className="m-0 mb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-500">Bill to</dt>
           <dd className="m-0 text-[12px] leading-[1.5] text-ink-800">
-            {SAMPLE_INVOICE.buyer}<br />accounts@northwind.co<br />Net 14 days
+            {SAMPLE_INVOICE.buyer}<br /><EmailOff text="accounts@northwind.co" /><br />Net 14 days
           </dd>
         </div>
       </dl>
