@@ -17,6 +17,7 @@ import {
 } from '@/lib/proforma/format'
 import { generateProformaPdf } from '@/lib/proforma/generatePdf'
 import { generateProformaXlsx } from '@/lib/proforma/generateXlsx'
+import EmailOff from '@/components/EmailOff'
 
 /* ---------- Local helpers ---------- */
 
@@ -662,7 +663,7 @@ function ProformaMock() {
         <div>
           <dt className="m-0 mb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-ink-500">Prepared for</dt>
           <dd className="m-0 text-[12px] leading-[1.5] text-ink-800">
-            Northwind Books Ltd.<br />accounts@northwind.co<br />Net 14 days
+            Northwind Books Ltd.<br /><EmailOff text="accounts@northwind.co" /><br />Net 14 days
           </dd>
         </div>
       </dl>

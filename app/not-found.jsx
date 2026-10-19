@@ -8,6 +8,7 @@ import {
   InvoiceIcon, QuoteIcon, ReceiptIcon, POIcon,
   PnlIcon, ExpenseIcon, BankStatementIcon, ReportIcon,
 } from '@/components/icons'
+import EmailOff from '@/components/EmailOff'
 
 /* Popular tools surfaced when a route 404s — keeps users one click
    from something useful instead of a dead-end. */
@@ -141,12 +142,11 @@ export default function NotFoundPage() {
         {/* Footnote */}
         <p className="m-0 mt-12 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-500">
           Reached this page from a link on Sonchoy?{' '}
-          <a
+          <EmailOff
             href="mailto:hello@sonchoy.com?subject=Broken%20link%20on%20Sonchoy"
             className="text-crimson-300 no-underline hover:text-crimson-400"
-          >
-            Let us know
-          </a>
+            text="Let us know"
+          />
           {' '}so we can fix it.
         </p>
       </div>

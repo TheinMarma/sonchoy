@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { pageMetadata } from '@/lib/seo'
+import EmailOff from '@/components/EmailOff'
 
 export const metadata = pageMetadata({
   path:  '/contact/',
@@ -119,12 +120,11 @@ export default function ContactPage() {
             <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-crimson-300">
               Email
             </span>
-            <a
+            <EmailOff
               href="mailto:hello@sonchoy.com"
               className="text-[16px] font-medium text-ink-950 no-underline hover:text-crimson-300 transition-colors"
-            >
-              hello@sonchoy.com
-            </a>
+              text="hello@sonchoy.com"
+            />
           </div>
         </div>
       </section>
@@ -153,12 +153,11 @@ export default function ContactPage() {
                 <p className="m-0 mb-4 text-[14.5px] leading-[1.65] text-ink-700">
                   {r.body}
                 </p>
-                <a
+                <EmailOff
                   href={r.href}
                   className="inline-flex items-center gap-2 text-[14px] font-medium text-crimson-300 no-underline hover:text-crimson-400"
-                >
-                  {r.cta} →
-                </a>
+                  text={`${r.cta} →`}
+                />
               </article>
             ))}
           </div>
