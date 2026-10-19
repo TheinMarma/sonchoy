@@ -90,7 +90,7 @@ function ToolHero() {
             Convert · Single-image to PDF
           </span>
           <h1 className="mb-7 max-w-[1000px] font-medium text-[44px] leading-[1.02] tracking-[-0.035em] text-ink-950 md:text-[80px] md:leading-[0.98]">
-            One receipt photo{' '}
+            PNG receipt{' '}
             <em className="font-serif font-normal italic tracking-[-0.015em] text-crimson-300">
               in,
             </em>

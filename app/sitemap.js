@@ -19,6 +19,7 @@ export default function sitemap() {
   const lastModified = new Date()
   const staticPages = [
     { url: `${SITE}/`,          priority: 1.0, changeFrequency: 'weekly' },
+    { url: `${SITE}/tools/`,    priority: 0.8, changeFrequency: 'weekly' },
     { url: `${SITE}/about/`,    priority: 0.6, changeFrequency: 'monthly' },
     { url: `${SITE}/contact/`,  priority: 0.6, changeFrequency: 'monthly' },
     { url: `${SITE}/terms/`,    priority: 0.4, changeFrequency: 'yearly' },
