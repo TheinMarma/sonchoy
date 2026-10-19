@@ -16,8 +16,8 @@
     "file-saver": "^2.0.5",
     "jspdf": "^4.2.1",
     "next": "^15.5.28",
-    "pdfjs-dist": "^5.7.284",
-    "postcss": "^8.5.16",
+    "pdfjs-dist": "^6.4.299",
+    "postcss": "^8.5.31",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "tailwindcss": "^4.2.4",
@@ -25,8 +25,9 @@
   },
   "overrides": {
     "brace-expansion": "^5.0.6",
-    "dompurify": "^3.4.11",
-    "postcss": "^8.5.16"
+    "dompurify": "^3.4.17",
+    "postcss": "^8.5.31",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
